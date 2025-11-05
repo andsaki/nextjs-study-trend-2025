@@ -1,0 +1,13 @@
+/* アコーディオンの開閉アニメーション */
+details[open] .accordion-icon {
+  transform: rotate(180deg);
+}
+
+/* summary要素のデフォルトマーカーを非表示 */
+summary::-webkit-details-marker {
+  display: none;
+}
+
+summary::marker {
+  display: none;
+}

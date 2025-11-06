@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/src/design-system/components";
 import { Plus, Search as SearchIcon } from "lucide-react";
 import { SearchForm } from "./SearchForm";
 import { TodoList } from "./TodoList";
 import { useTodos, useUpdateTodo, useDeleteTodo } from "@/lib/hooks/useTodos";
+import { useTodoSearchStore } from "@/lib/store/useTodoSearchStore";
 import type { TodoSearchParams } from "@/lib/api/todos";
 
 /**
@@ -21,8 +22,43 @@ import type { TodoSearchParams } from "@/lib/api/todos";
  */
 export default function TodosPage() {
   const router = useRouter();
-  const [showSearch, setShowSearch] = useState(false);
-  const [searchParams, setSearchParams] = useState<TodoSearchParams>({});
+  const searchParamsFromUrl = useSearchParams();
+
+  // Zustand store
+  const {
+    searchParams,
+    showSearch,
+    setSearchParams,
+    setShowSearch,
+    toggleShowSearch,
+  } = useTodoSearchStore();
+
+  // URLからクエリパラメータを読み込み、Zustand storeに反映
+  useEffect(() => {
+    const params: TodoSearchParams = {};
+    const q = searchParamsFromUrl.get("q");
+    const completed = searchParamsFromUrl.get("completed");
+    const priority = searchParamsFromUrl.get("priority");
+    const sortBy = searchParamsFromUrl.get("sortBy");
+    const sortOrder = searchParamsFromUrl.get("sortOrder");
+
+    if (q) params.q = q;
+    if (completed === "true") params.completed = true;
+    if (completed === "false") params.completed = false;
+    if (priority && ["low", "medium", "high"].includes(priority)) {
+      params.priority = priority as "low" | "medium" | "high";
+    }
+    if (sortBy) params.sortBy = sortBy as "createdAt" | "updatedAt" | "title" | "priority";
+    if (sortOrder) params.sortOrder = sortOrder as "asc" | "desc";
+
+    // Zustand storeに保存
+    setSearchParams(params);
+
+    // クエリパラメータがある場合は検索フォームを表示
+    if (Object.keys(params).length > 0) {
+      setShowSearch(true);
+    }
+  }, [searchParamsFromUrl, setSearchParams, setShowSearch]);
 
   // TanStack Query hooks
   const { data: todos = [], isLoading, error } = useTodos(searchParams);
@@ -30,7 +66,18 @@ export default function TodosPage() {
   const deleteMutation = useDeleteTodo();
 
   const handleSearch = (params: TodoSearchParams) => {
+    // Zustand storeに保存
     setSearchParams(params);
+
+    // URLクエリパラメータを更新
+    const urlParams = new URLSearchParams();
+    if (params.q) urlParams.set("q", params.q);
+    if (params.completed !== undefined) urlParams.set("completed", String(params.completed));
+    if (params.priority) urlParams.set("priority", params.priority);
+    if (params.sortBy) urlParams.set("sortBy", params.sortBy);
+    if (params.sortOrder) urlParams.set("sortOrder", params.sortOrder);
+
+    router.push(`/todos?${urlParams.toString()}`);
   };
 
   const handleDelete = (id: string) => {
@@ -94,7 +141,7 @@ export default function TodosPage() {
               variant="outline"
               size="lg"
               icon={<SearchIcon size={20} />}
-              onClick={() => setShowSearch(!showSearch)}
+              onClick={toggleShowSearch}
             >
               {showSearch ? "検索を閉じる" : "検索"}
             </Button>

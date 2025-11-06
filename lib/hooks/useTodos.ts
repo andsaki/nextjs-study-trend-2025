@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useSuspenseQuery, useQueryClient } from "@tanstack/react-query";
 import { getTodos, getTodoById, createTodo, updateTodo, deleteTodo, type TodoSearchParams } from "../api/todos";
 import type { CreateTodoInput, UpdateTodoInput } from "../types/todo";
 
@@ -7,6 +7,17 @@ import type { CreateTodoInput, UpdateTodoInput } from "../types/todo";
  */
 export function useTodos(searchParams?: TodoSearchParams) {
   return useQuery({
+    queryKey: ["todos", searchParams],
+    queryFn: () => getTodos(searchParams),
+  });
+}
+
+/**
+ * Todoリスト取得用フック（Suspense対応版）
+ * React SuspenseとError Boundaryを使用してローディング・エラー状態を処理
+ */
+export function useTodosSuspense(searchParams?: TodoSearchParams) {
+  return useSuspenseQuery({
     queryKey: ["todos", searchParams],
     queryFn: () => getTodos(searchParams),
   });

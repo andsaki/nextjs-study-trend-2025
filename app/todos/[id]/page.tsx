@@ -1,5 +1,6 @@
 "use client";
 
+import { use } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/src/design-system/components";
 import { ArrowLeft, Edit, Trash2, Check, X } from "lucide-react";
@@ -13,9 +14,10 @@ import { useTodo, useUpdateTodo, useDeleteTodo } from "@/lib/hooks/useTodos";
  * - 完了状態のトグル
  * - 編集・削除へのナビゲーション
  */
-export default function TodoDetailPage({ params }: { params: { id: string } }) {
+export default function TodoDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
-  const { data: todo, isLoading, error } = useTodo(params.id);
+  const { id } = use(params);
+  const { data: todo, isLoading, error } = useTodo(id);
   const updateMutation = useUpdateTodo();
   const deleteMutation = useDeleteTodo();
 

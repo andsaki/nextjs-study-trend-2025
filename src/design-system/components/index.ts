@@ -15,3 +15,9 @@ export type { SelectProps } from './Select';
 
 export { Breadcrumbs, BreadcrumbList, BreadcrumbItem, BreadcrumbLink } from './Breadcrumbs';
 export type { BreadcrumbsProps, BreadcrumbListProps, BreadcrumbItemProps, BreadcrumbLinkProps } from './Breadcrumbs';
+
+export { Loading, InlineLoading } from './Loading';
+export type { LoadingProps } from './Loading';
+
+export { Modal } from './Modal';
+export type { ModalProps } from './Modal';

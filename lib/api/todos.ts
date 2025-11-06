@@ -1,6 +1,24 @@
 import type { Todo, CreateTodoInput, UpdateTodoInput, ApiResponse } from "../types/todo";
 
-const API_BASE_URL = "/api/todos";
+/**
+ * API Base URLを取得（サーバー/クライアント両対応）
+ */
+function getApiBaseUrl(): string {
+  // クライアントサイド
+  if (typeof window !== "undefined") {
+    return `${window.location.origin}/api/todos`;
+  }
+
+  // サーバーサイド
+  // VERCEL_URL は Vercel環境で自動設定される
+  // NEXT_PUBLIC_APP_URL は開発環境用のフォールバック
+  const baseUrl =
+    process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+
+  return `${baseUrl}/api/todos`;
+}
 
 /**
  * 検索パラメータの型定義
@@ -17,6 +35,7 @@ export interface TodoSearchParams {
  * 全てのTodoを取得（検索・フィルター・ソート対応）
  */
 export async function getTodos(params?: TodoSearchParams): Promise<Todo[]> {
+  const API_BASE_URL = getApiBaseUrl();
   const searchParams = new URLSearchParams();
 
   if (params?.q) searchParams.set("q", params.q);
@@ -41,6 +60,7 @@ export async function getTodos(params?: TodoSearchParams): Promise<Todo[]> {
  * IDでTodoを取得
  */
 export async function getTodoById(id: string): Promise<Todo> {
+  const API_BASE_URL = getApiBaseUrl();
   const response = await fetch(`${API_BASE_URL}/${id}`);
   if (!response.ok) {
     throw new Error(`Failed to fetch todo with id: ${id}`);
@@ -53,6 +73,7 @@ export async function getTodoById(id: string): Promise<Todo> {
  * Todoを作成
  */
 export async function createTodo(input: CreateTodoInput): Promise<Todo> {
+  const API_BASE_URL = getApiBaseUrl();
   const response = await fetch(API_BASE_URL, {
     method: "POST",
     headers: {
@@ -71,6 +92,7 @@ export async function createTodo(input: CreateTodoInput): Promise<Todo> {
  * Todoを更新
  */
 export async function updateTodo(id: string, input: UpdateTodoInput): Promise<Todo> {
+  const API_BASE_URL = getApiBaseUrl();
   const response = await fetch(`${API_BASE_URL}/${id}`, {
     method: "PATCH",
     headers: {
@@ -89,6 +111,7 @@ export async function updateTodo(id: string, input: UpdateTodoInput): Promise<To
  * Todoを削除
  */
 export async function deleteTodo(id: string): Promise<void> {
+  const API_BASE_URL = getApiBaseUrl();
   const response = await fetch(`${API_BASE_URL}/${id}`, {
     method: "DELETE",
   });

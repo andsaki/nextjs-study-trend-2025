@@ -216,7 +216,14 @@ export const Button: React.FC<ButtonProps> = ({
         </span>
       )}
       {/* アイコンの表示（装飾的なのでaria-hidden） */}
-      {!isLoading && icon && <span aria-hidden="true">{icon}</span>}
+      {!isLoading && icon && (
+        <span
+          aria-hidden="true"
+          style={{ display: "inline-flex", alignItems: "center" }}
+        >
+          {icon}
+        </span>
+      )}
       {children}
     </button>
   );

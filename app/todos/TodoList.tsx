@@ -1,13 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import { Button, Checkbox } from "@/src/design-system/components";
 import { Trash2, Edit } from "lucide-react";
 import type { Todo } from "@/lib/types/todo";
 
 interface TodoListProps {
   todos: Todo[];
-  onDelete: (id: string) => void;
+  onDelete: (todo: Todo) => void;
   onEdit: (todo: Todo) => void;
   onToggleComplete: (id: string, completed: boolean) => void;
   onViewDetail?: (todo: Todo) => void;
@@ -24,14 +23,6 @@ export function TodoList({
   isDeleting,
   isUpdating,
 }: TodoListProps) {
-  const [deletingId, setDeletingId] = useState<string | null>(null);
-
-  const handleDelete = async (id: string) => {
-    setDeletingId(id);
-    await onDelete(id);
-    setDeletingId(null);
-  };
-
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case "high":
@@ -170,9 +161,8 @@ export function TodoList({
             <Button
               variant="outline"
               size="sm"
-              onClick={() => handleDelete(todo.id)}
+              onClick={() => onDelete(todo)}
               icon={<Trash2 size={16} />}
-              isLoading={deletingId === todo.id && isDeleting}
               disabled={isDeleting}
             >
               削除

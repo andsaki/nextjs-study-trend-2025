@@ -1,5 +1,6 @@
 "use client";
 
+import { use } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/src/design-system/components";
 import { ArrowLeft } from "lucide-react";
@@ -15,24 +16,25 @@ import type { CreateTodoInput } from "@/lib/types/todo";
  * - フォームバリデーション
  * - 更新後の詳細ページへのリダイレクト
  */
-export default function TodoEditPage({ params }: { params: { id: string } }) {
+export default function TodoEditPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
-  const { data: todo, isLoading, error } = useTodo(params.id);
+  const { id } = use(params);
+  const { data: todo, isLoading, error } = useTodo(id);
   const updateMutation = useUpdateTodo();
 
   const handleSubmit = (data: CreateTodoInput) => {
     updateMutation.mutate(
-      { id: params.id, data },
+      { id, data },
       {
         onSuccess: () => {
-          router.push(`/todos/${params.id}`);
+          router.push(`/todos/${id}`);
         },
       }
     );
   };
 
   const handleCancel = () => {
-    router.push(`/todos/${params.id}`);
+    router.push(`/todos/${id}`);
   };
 
   if (isLoading) {

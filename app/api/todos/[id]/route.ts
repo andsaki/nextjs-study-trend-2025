@@ -8,11 +8,12 @@ import type { ApiResponse } from "@/lib/types/todo";
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const todo = await prisma.todo.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!todo) {
@@ -42,15 +43,16 @@ export async function GET(
  */
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     const validated = updateTodoSchema.parse(body);
 
     // データベースで更新
     const updatedTodo = await prisma.todo.update({
-      where: { id: params.id },
+      where: { id },
       data: validated,
     });
 
@@ -86,11 +88,12 @@ export async function PATCH(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     await prisma.todo.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json(

@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { Button } from "@/src/design-system/components";
+import { Button, Input, Select } from "@/src/design-system/components";
 import { Search, X, SortAsc, SortDesc } from "lucide-react";
 import type { TodoSearchParams } from "@/lib/api/todos";
 
@@ -68,165 +68,64 @@ export function SearchForm({ onSearch, defaultValues }: SearchFormProps) {
         >
           {/* キーワード検索 */}
           <div style={{ gridColumn: "1 / -1" }}>
-            <label
-              htmlFor="search-query"
-              style={{
-                display: "block",
-                marginBottom: "0.5rem",
-                fontSize: "0.875rem",
-                fontWeight: 600,
-                color: "#616161",
-              }}
-            >
-              キーワード検索
-            </label>
-            <input
-              id="search-query"
-              type="text"
+            <Input
+              label="キーワード検索"
               placeholder="タイトルまたは説明で検索..."
               {...register("q")}
-              style={{
-                width: "100%",
-                padding: "0.5rem 0.75rem",
-                fontSize: "1rem",
-                border: "1px solid #e0e0e0",
-                borderRadius: "4px",
-                outline: "none",
-              }}
             />
           </div>
 
           {/* 完了状態フィルター */}
           <div>
-            <label
-              htmlFor="filter-completed"
-              style={{
-                display: "block",
-                marginBottom: "0.5rem",
-                fontSize: "0.875rem",
-                fontWeight: 600,
-                color: "#616161",
-              }}
-            >
-              完了状態
-            </label>
-            <select
-              id="filter-completed"
+            <Select
+              label="完了状態"
+              options={[
+                { value: "", label: "すべて" },
+                { value: "false", label: "未完了" },
+                { value: "true", label: "完了" },
+              ]}
               {...register("completed")}
-              style={{
-                width: "100%",
-                padding: "0.5rem 0.75rem",
-                fontSize: "1rem",
-                border: "1px solid #e0e0e0",
-                borderRadius: "4px",
-                outline: "none",
-                backgroundColor: "#ffffff",
-              }}
-            >
-              <option value="">すべて</option>
-              <option value="false">未完了</option>
-              <option value="true">完了</option>
-            </select>
+            />
           </div>
 
           {/* 優先度フィルター */}
           <div>
-            <label
-              htmlFor="filter-priority"
-              style={{
-                display: "block",
-                marginBottom: "0.5rem",
-                fontSize: "0.875rem",
-                fontWeight: 600,
-                color: "#616161",
-              }}
-            >
-              優先度
-            </label>
-            <select
-              id="filter-priority"
+            <Select
+              label="優先度"
+              options={[
+                { value: "", label: "すべて" },
+                { value: "high", label: "高" },
+                { value: "medium", label: "中" },
+                { value: "low", label: "低" },
+              ]}
               {...register("priority")}
-              style={{
-                width: "100%",
-                padding: "0.5rem 0.75rem",
-                fontSize: "1rem",
-                border: "1px solid #e0e0e0",
-                borderRadius: "4px",
-                outline: "none",
-                backgroundColor: "#ffffff",
-              }}
-            >
-              <option value="">すべて</option>
-              <option value="high">高</option>
-              <option value="medium">中</option>
-              <option value="low">低</option>
-            </select>
+            />
           </div>
 
           {/* ソート項目 */}
           <div>
-            <label
-              htmlFor="sort-by"
-              style={{
-                display: "block",
-                marginBottom: "0.5rem",
-                fontSize: "0.875rem",
-                fontWeight: 600,
-                color: "#616161",
-              }}
-            >
-              並び替え
-            </label>
-            <select
-              id="sort-by"
+            <Select
+              label="並び替え"
+              options={[
+                { value: "createdAt", label: "作成日" },
+                { value: "updatedAt", label: "更新日" },
+                { value: "title", label: "タイトル" },
+                { value: "priority", label: "優先度" },
+              ]}
               {...register("sortBy")}
-              style={{
-                width: "100%",
-                padding: "0.5rem 0.75rem",
-                fontSize: "1rem",
-                border: "1px solid #e0e0e0",
-                borderRadius: "4px",
-                outline: "none",
-                backgroundColor: "#ffffff",
-              }}
-            >
-              <option value="createdAt">作成日</option>
-              <option value="updatedAt">更新日</option>
-              <option value="title">タイトル</option>
-              <option value="priority">優先度</option>
-            </select>
+            />
           </div>
 
           {/* ソート順 */}
           <div>
-            <label
-              htmlFor="sort-order"
-              style={{
-                display: "block",
-                marginBottom: "0.5rem",
-                fontSize: "0.875rem",
-                fontWeight: 600,
-                color: "#616161",
-              }}
-            >
-              順序
-            </label>
-            <select
-              id="sort-order"
+            <Select
+              label="順序"
+              options={[
+                { value: "desc", label: "降順" },
+                { value: "asc", label: "昇順" },
+              ]}
               {...register("sortOrder")}
-              style={{
-                width: "100%",
-                padding: "0.5rem 0.75rem",
-                fontSize: "1rem",
-                border: "1px solid #e0e0e0",
-                borderRadius: "4px",
-                outline: "none",
-                backgroundColor: "#ffffff",
-              }}
-            >
-              <option value="desc">降順</option>
-              <option value="asc">昇順</option>
-            </select>
+            />
           </div>
         </div>
 

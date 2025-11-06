@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/src/design-system/components";
-import { Trash2, Edit, Check } from "lucide-react";
+import { Button, Checkbox } from "@/src/design-system/components";
+import { Trash2, Edit } from "lucide-react";
 import type { Todo } from "@/lib/types/todo";
 
 interface TodoListProps {
@@ -93,36 +93,16 @@ export function TodoList({
         >
           {/* コンテンツ */}
           <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.5rem" }}>
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  onToggleComplete(todo.id, !todo.completed);
-                }}
-                onMouseDown={(e) => {
-                  e.stopPropagation();
-                }}
-                type="button"
-                style={{
-                  width: "24px",
-                  height: "24px",
-                  borderRadius: "4px",
-                  border: `2px solid ${todo.completed ? "#2196f3" : "#e0e0e0"}`,
-                  backgroundColor: todo.completed ? "#2196f3" : "transparent",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                  transition: "all 0.2s ease",
-                  flexShrink: 0,
-                  position: "relative",
-                  zIndex: 10,
-                }}
-                aria-label={todo.completed ? "未完了にする" : "完了にする"}
-              >
-                {todo.completed && <Check size={16} color="#ffffff" />}
-              </button>
+            <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem", marginBottom: "0.5rem" }}>
+              <div style={{ paddingTop: "0.125rem" }}>
+                <Checkbox
+                  label=""
+                  checked={todo.completed}
+                  onChange={() => onToggleComplete(todo.id, !todo.completed)}
+                  disabled={isUpdating}
+                  aria-label={todo.completed ? "未完了にする" : "完了にする"}
+                />
+              </div>
               <h3
                 onClick={() => onViewDetail?.(todo)}
                 style={{

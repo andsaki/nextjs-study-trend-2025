@@ -34,6 +34,91 @@ Next.js App RouterとTanStack Queryを使用したTodoアプリケーション�
 
 サーバー状態はTanStack Query、UI状態はZustandという明確な責務分離を行う。
 
+### useStateとの使い分け
+
+**重要**: すべての状態をZustandで管理する必要はない。useStateとZustandを適切に使い分ける。
+
+```tsx
+// ✅ useState（ローカル状態）
+function TodoForm() {
+  const [title, setTitle] = useState('') // ← このコンポーネントだけで使う
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  return (
+    <form>
+      <input value={title} onChange={(e) => setTitle(e.target.value)} />
+    </form>
+  )
+}
+
+// ✅ Zustand（グローバル状態）
+const useAppStore = create((set) => ({
+  sidebarOpen: false, // ← 複数コンポーネントで共有
+  toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
+}))
+
+function Sidebar() {
+  const { sidebarOpen } = useAppStore() // 状態を参照
+  // ...
+}
+
+function Header() {
+  const { toggleSidebar } = useAppStore() // アクションを使用
+  // ...
+}
+```
+
+**判断基準**:
+
+| 状態の特徴 | 推奨 | 理由 |
+|-----------|------|------|
+| 1つのコンポーネントだけで使う | **useState** | シンプル、オーバーヘッドなし |
+| 親子関係（1-2階層）で共有 | **useState + props** | Prop drilling許容範囲 |
+| 複数の無関係なコンポーネントで共有 | **Zustand** | Prop drilling回避 |
+| ページリロード後も保持したい | **Zustand + persist** | localStorage自動同期 |
+| URLと同期したい | **Zustand + router** | 検索パラメータ等 |
+| フォーム入力中の一時的な値 | **useState** or **React Hook Form** | ローカルで完結 |
+| モーダル開閉、サイドバー開閉 | **Zustand** | 複数箇所から操作 |
+
+**具体例**:
+
+```tsx
+// ❌ アンチパターン: ローカル状態をZustandに
+const useFormStore = create((set) => ({
+  title: '',
+  setTitle: (title: string) => set({ title }),
+}))
+
+function TodoForm() {
+  const { title, setTitle } = useFormStore()
+  // → オーバーエンジニアリング、useStateで十分
+}
+
+// ✅ 正しい: ローカル状態はuseState
+function TodoForm() {
+  const [title, setTitle] = useState('')
+  // → シンプルで明快
+}
+
+// ✅ 正しい: グローバル状態はZustand
+const useModalStore = create((set) => ({
+  isOpen: false,
+  todoId: null,
+  open: (todoId: string) => set({ isOpen: true, todoId }),
+  close: () => set({ isOpen: false, todoId: null }),
+}))
+
+function TodoList() {
+  const { open } = useModalStore()
+  return <button onClick={() => open('123')}>詳細</button>
+}
+
+function TodoDetailModal() {
+  const { isOpen, todoId, close } = useModalStore()
+  // 別のコンポーネントツリーにあっても状態共有可能
+}
+```
+
 ## 理由
 
 ### 1. シンプルで直感的なAPI

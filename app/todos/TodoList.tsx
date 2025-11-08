@@ -159,7 +159,7 @@ export function TodoList({
               編集
             </Button>
             <Button
-              variant="outline"
+              variant="danger"
               size="sm"
               onClick={() => onDelete(todo)}
               icon={<Trash2 size={16} />}

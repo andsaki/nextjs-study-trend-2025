@@ -8,6 +8,11 @@
  * 3. デフォルト
  */
 
+/* デフォルトのボーダー色（CSS変数経由） */
+button {
+  border-color: var(--border-color);
+}
+
 /* ホバー時のスタイル（フォーカスしていない場合のみ） */
 button:hover:not([data-focused]):not(:disabled) {
   background-color: var(--hover-bg) !important;

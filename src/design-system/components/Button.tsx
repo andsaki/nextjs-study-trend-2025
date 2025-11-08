@@ -12,7 +12,7 @@ import "./Button.css";
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** ボタンのバリエーション */
-  variant?: "primary" | "secondary" | "outline";
+  variant?: "primary" | "secondary" | "outline" | "danger";
   /** ボタンのサイズ */
   size?: "sm" | "md" | "lg";
   /** ローディング状態 */
@@ -78,7 +78,6 @@ export const Button: React.FC<ButtonProps> = ({
     fontFamily: typography.fontFamily.base,
     fontWeight: typography.fontWeight.semibold,
     borderRadius: radii.borderRadius.md,
-    border: "none",
     cursor: disabled || isLoading ? "not-allowed" : "pointer",
     display: "inline-flex",
     alignItems: "center",
@@ -90,6 +89,22 @@ export const Button: React.FC<ButtonProps> = ({
     position: "relative",
   };
 
+  // 各バリアントのボーダー色
+  const borderColors = {
+    primary: disabled
+      ? colors.button.primary.bgDisabled
+      : levelColors.primary.border,
+    secondary: disabled
+      ? colors.button.secondary.borderHover
+      : levelColors.secondary.border,
+    outline: disabled
+      ? colors.button.outline.borderDisabled || colors.border.default
+      : levelColors.primary.bg,
+    danger: disabled
+      ? colors.button.danger.bgDisabled
+      : colors.button.danger.border,
+  };
+
   // バリアントスタイル: WCAGレベルとバリアントに応じた見た目を定義
   const variantStyles: Record<string, React.CSSProperties> = {
     primary: {
@@ -99,9 +114,8 @@ export const Button: React.FC<ButtonProps> = ({
       color: disabled
         ? colors.button.primary.textDisabled
         : levelColors.primary.text,
-      border: `1px solid ${
-        disabled ? colors.button.primary.bgDisabled : levelColors.primary.border
-      }`,
+      borderWidth: "1px",
+      borderStyle: "solid",
     },
     secondary: {
       backgroundColor: disabled
@@ -110,11 +124,8 @@ export const Button: React.FC<ButtonProps> = ({
       color: disabled
         ? colors.button.secondary.textDisabled
         : levelColors.secondary.text,
-      border: `1px solid ${
-        disabled
-          ? colors.button.secondary.borderHover
-          : levelColors.secondary.border
-      }`,
+      borderWidth: "1px",
+      borderStyle: "solid",
     },
     outline: {
       backgroundColor: disabled
@@ -123,11 +134,18 @@ export const Button: React.FC<ButtonProps> = ({
       color: disabled
         ? colors.button.outline.textDisabled
         : levelColors.primary.bg,
-      border: `2px solid ${
-        disabled
-          ? colors.button.outline.borderDisabled || colors.border.default
-          : levelColors.primary.bg
-      }`,
+      borderWidth: "2px",
+      borderStyle: "solid",
+    },
+    danger: {
+      backgroundColor: disabled
+        ? colors.button.danger.bgDisabled
+        : colors.button.danger.bg,
+      color: disabled
+        ? colors.button.danger.textDisabled
+        : colors.button.danger.text,
+      borderWidth: "1px",
+      borderStyle: "solid",
     },
   };
 
@@ -160,6 +178,8 @@ export const Button: React.FC<ButtonProps> = ({
       ? colors.button.primary.bgHover
       : variant === "secondary"
       ? colors.button.secondary.bgHover
+      : variant === "danger"
+      ? colors.button.danger.bgHover
       : colors.button.outline.bgHover;
 
   const hoverBorder =
@@ -167,10 +187,19 @@ export const Button: React.FC<ButtonProps> = ({
       ? colors.button.primary.borderHover
       : variant === "secondary"
       ? colors.button.secondary.borderHover
+      : variant === "danger"
+      ? colors.button.danger.borderHover
       : colors.button.outline.borderHover || colors.button.outline.bgHover;
 
   // propsからstyleを分離して、最後にマージする
   const { style: externalStyle, ...restProps } = props;
+
+  // 外部から渡されたstyleからborderショートハンドを除外
+  const sanitizedExternalStyle = externalStyle
+    ? Object.fromEntries(
+        Object.entries(externalStyle).filter(([key]) => key !== "border")
+      )
+    : {};
 
   return (
     <button
@@ -183,7 +212,8 @@ export const Button: React.FC<ButtonProps> = ({
       {...restProps}
       style={{
         ...styles,
-        // CSS変数でホバー/フォーカス色を定義
+        // CSS変数でボーダー/ホバー/フォーカス色を定義
+        ["--border-color" as string]: borderColors[variant],
         ["--hover-bg" as string]: disabled || isLoading ? "" : hoverBg,
         ["--hover-border" as string]: disabled || isLoading ? "" : hoverBorder,
         ["--focus-bg" as string]: levelFocus.background,
@@ -191,8 +221,8 @@ export const Button: React.FC<ButtonProps> = ({
         ["--focus-outline" as string]: levelFocus.outline,
         ["--focus-outline-width" as string]: levelFocus.outlineWidth,
         ["--focus-outline-offset" as string]: levelFocus.outlineOffset,
-        // 外部から渡されたstyleを最後にマージ（backgroundColorなどは上書きさせない）
-        ...externalStyle,
+        // 外部から渡されたstyleを最後にマージ（borderショートハンドは除外済み）
+        ...sanitizedExternalStyle,
       }}
       onMouseEnter={restProps.onMouseEnter}
       onMouseLeave={restProps.onMouseLeave}

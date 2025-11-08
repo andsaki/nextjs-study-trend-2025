@@ -351,6 +351,20 @@ export const button = {
     borderHover: primitive.blue[600],
     borderDisabled: primitive.gray[300],
   },
+  /**
+   * デンジャーボタン
+   * 危険なアクション（削除、破棄など）に使用
+   */
+  danger: {
+    bg: primitive.red[600], // 背景: 赤
+    bgHover: primitive.red[700], // ホバー時: 濃い赤
+    bgActive: primitive.red[800], // 押下時: さらに濃く
+    bgDisabled: primitive.gray[300], // 無効化時: グレー
+    text: primitive.white, // テキスト: 白
+    textDisabled: primitive.gray[500], // 無効化時テキスト: 薄いグレー
+    border: primitive.red[600], // ボーダー: 背景と同色
+    borderHover: primitive.red[700], // ホバー時ボーダー
+  },
 } as const;
 
 /**

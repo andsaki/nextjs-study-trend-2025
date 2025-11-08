@@ -71,15 +71,19 @@ export function ConfirmModal({
             {cancelLabel}
           </Button>
           <Button
-            variant="primary"
+            variant={variant === "danger" ? "danger" : "primary"}
             size="md"
             onClick={onConfirm}
             isLoading={isLoading}
             disabled={isLoading}
-            style={{
-              backgroundColor: colors.buttonBg,
-              borderColor: colors.buttonBg,
-            }}
+            style={
+              variant !== "danger"
+                ? {
+                    backgroundColor: colors.buttonBg,
+                    borderColor: colors.buttonBg,
+                  }
+                : undefined
+            }
           >
             {confirmLabel}
           </Button>

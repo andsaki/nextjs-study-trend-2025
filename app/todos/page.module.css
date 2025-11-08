@@ -1,0 +1,114 @@
+.container {
+  min-height: 100vh;
+  background-color: #fafafa;
+  padding: 2rem;
+}
+
+.wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.headerContent h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #212121;
+  margin-bottom: 0.5rem;
+}
+
+.headerContent p {
+  color: #757575;
+  font-size: 0.875rem;
+}
+
+.headerActions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.searchFormWrapper {
+  margin-bottom: 2rem;
+}
+
+/* Mobile: 検索フォームを非表示 */
+@media (max-width: 767px) {
+  .searchFormWrapper {
+    display: none;
+  }
+}
+
+.stats {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.statItem {
+  text-align: center;
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.statLabel {
+  font-size: 0.875rem;
+  color: #757575;
+}
+
+.statValue.total {
+  color: #2196f3;
+}
+
+.statValue.completed {
+  color: #4caf50;
+}
+
+.statValue.incomplete {
+  color: #ff9800;
+}
+
+/* Mobile styles */
+@media (max-width: 767px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+  }
+
+  .headerContent h1 {
+    font-size: 1.5rem;
+  }
+
+  .headerActions {
+    flex-direction: column;
+  }
+
+  .stats {
+    margin-top: 1.5rem;
+    padding: 0.75rem;
+    gap: 1rem;
+  }
+
+  .statValue {
+    font-size: 1.25rem;
+  }
+}

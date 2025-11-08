@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Button, Loading } from "@/src/design-system/components";
+import { Button, Loading, Modal } from "@/src/design-system/components";
 import { Plus, Search as SearchIcon } from "lucide-react";
 import { SearchForm } from "./SearchForm";
 import { TodoList } from "./TodoList";
@@ -12,6 +12,7 @@ import { ErrorBoundary } from "@/app/components/ErrorBoundary";
 import { ConfirmModal } from "@/app/components/ConfirmModal";
 import type { TodoSearchParams } from "@/lib/api/todos";
 import type { Todo } from "@/lib/types/todo";
+import styles from "./page.module.css";
 
 /**
  * ローディングフォールバック
@@ -113,35 +114,18 @@ function TodosContent({ searchParams }: { searchParams: TodoSearchParams }) {
 
       {/* 統計情報 */}
       {todos.length > 0 && (
-        <div
-          style={{
-            marginTop: "2rem",
-            padding: "1rem",
-            backgroundColor: "#ffffff",
-            border: "1px solid #e0e0e0",
-            borderRadius: "8px",
-            display: "flex",
-            gap: "2rem",
-            justifyContent: "center",
-          }}
-        >
-          <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "1.5rem", fontWeight: 700, color: "#2196f3" }}>
-              {todos.length}
-            </div>
-            <div style={{ fontSize: "0.875rem", color: "#757575" }}>全体</div>
+        <div className={styles.stats}>
+          <div className={styles.statItem}>
+            <div className={`${styles.statValue} ${styles.total}`}>{todos.length}</div>
+            <div className={styles.statLabel}>全体</div>
           </div>
-          <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "1.5rem", fontWeight: 700, color: "#4caf50" }}>
-              {todos.filter((t) => t.completed).length}
-            </div>
-            <div style={{ fontSize: "0.875rem", color: "#757575" }}>完了</div>
+          <div className={styles.statItem}>
+            <div className={`${styles.statValue} ${styles.completed}`}>{todos.filter((t) => t.completed).length}</div>
+            <div className={styles.statLabel}>完了</div>
           </div>
-          <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "1.5rem", fontWeight: 700, color: "#ff9800" }}>
-              {todos.filter((t) => !t.completed).length}
-            </div>
-            <div style={{ fontSize: "0.875rem", color: "#757575" }}>未完了</div>
+          <div className={styles.statItem}>
+            <div className={`${styles.statValue} ${styles.incomplete}`}>{todos.filter((t) => !t.completed).length}</div>
+            <div className={styles.statLabel}>未完了</div>
           </div>
         </div>
       )}
@@ -162,6 +146,7 @@ function TodosContent({ searchParams }: { searchParams: TodoSearchParams }) {
 export default function TodosPage() {
   const router = useRouter();
   const searchParamsFromUrl = useSearchParams();
+  const [isMobileModalOpen, setIsMobileModalOpen] = useState(false);
 
   // Zustand store
   const {
@@ -212,79 +197,59 @@ export default function TodosPage() {
     if (params.sortOrder) urlParams.set("sortOrder", params.sortOrder);
 
     router.push(`/todos?${urlParams.toString()}`);
+
+    // モバイルモーダルを閉じる
+    setIsMobileModalOpen(false);
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        backgroundColor: "#fafafa",
-        padding: "2rem",
-      }}
-    >
-      <div
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto",
-        }}
-      >
+    <div className={styles.container}>
+      <div className={styles.wrapper}>
         {/* ヘッダー */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "2rem",
-          }}
-        >
-          <div>
-            <h1
-              style={{
-                fontSize: "2rem",
-                fontWeight: 700,
-                color: "#212121",
-                marginBottom: "0.5rem",
-              }}
-            >
-              Todo一覧
-            </h1>
-            <p style={{ color: "#757575", fontSize: "0.875rem" }}>
-              Todo管理システム - 一覧・検索・フィルター
-            </p>
+        <div className={styles.header}>
+          <div className={styles.headerContent}>
+            <h1>Todo一覧</h1>
+            <p>Todo管理システム - 一覧・検索・フィルター</p>
           </div>
-          <div style={{ display: "flex", gap: "0.75rem" }}>
+          <div className={styles.headerActions}>
             <Button
               variant="outline"
               size="lg"
               icon={<SearchIcon size={20} />}
-              onClick={toggleShowSearch}
+              onClick={() => {
+                toggleShowSearch();
+                setIsMobileModalOpen(!isMobileModalOpen);
+              }}
             >
-              {showSearch ? "検索を閉じる" : "検索"}
+              検索
             </Button>
-            <Button
-              variant="primary"
-              size="lg"
-              icon={<Plus size={20} />}
-              onClick={() => router.push("/todos/new")}
-            >
+            <Button variant="primary" size="lg" icon={<Plus size={20} />} onClick={() => router.push("/todos/new")}>
               新規作成
             </Button>
           </div>
         </div>
 
-        {/* 検索フォーム */}
+        {/* 検索フォーム（PC: インライン、Mobile: モーダル） */}
+        <Modal
+          isOpen={isMobileModalOpen}
+          onClose={() => {
+            setIsMobileModalOpen(false);
+            setShowSearch(false);
+          }}
+          title="検索・フィルター"
+          size="md"
+        >
+          <SearchForm onSearch={handleSearch} defaultValues={searchParams} />
+        </Modal>
+
         {showSearch && (
-          <div style={{ marginBottom: "2rem" }}>
+          <div className={styles.searchFormWrapper}>
             <SearchForm onSearch={handleSearch} defaultValues={searchParams} />
           </div>
         )}
 
         {/* Todoリスト（Suspense + ErrorBoundary対応） */}
-        <ErrorBoundary
-          fallback={(error) => (
-            <TodosErrorFallback error={error} />
-          )}
-        >
+        <ErrorBoundary fallback={(error) => <TodosErrorFallback error={error} />}>
           <Suspense fallback={<TodosLoadingFallback />}>
             <TodosContent searchParams={searchParams} />
           </Suspense>

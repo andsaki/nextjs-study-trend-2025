@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/src/design-system/components";
 import { ArrowLeft, Edit, Trash2, Check, X } from "lucide-react";
 import { useTodo, useUpdateTodo, useDeleteTodo } from "@/lib/hooks/useTodos";
+import { useToastStore } from "@/lib/store/useToastStore";
 
 /**
  * Todo詳細ページ
@@ -20,10 +21,25 @@ export default function TodoDetailPage({ params }: { params: Promise<{ id: strin
   const { data: todo, isLoading, error } = useTodo(id);
   const updateMutation = useUpdateTodo();
   const deleteMutation = useDeleteTodo();
+  const { success, error: showError } = useToastStore();
 
   const handleToggleComplete = () => {
     if (!todo) return;
-    updateMutation.mutate({ id: todo.id, data: { completed: !todo.completed } });
+    const newCompleted = !todo.completed;
+    updateMutation.mutate(
+      { id: todo.id, data: { completed: newCompleted } },
+      {
+        onSuccess: () => {
+          success(
+            newCompleted ? `「${todo.title}」を完了にしました` : `「${todo.title}」を未完了に戻しました`,
+            newCompleted ? "完了" : "未完了"
+          );
+        },
+        onError: (error) => {
+          showError(`更新に失敗しました: ${error.message}`, "エラー");
+        },
+      }
+    );
   };
 
   const handleDelete = () => {
@@ -31,7 +47,11 @@ export default function TodoDetailPage({ params }: { params: Promise<{ id: strin
     if (confirm("このTodoを削除しますか？")) {
       deleteMutation.mutate(todo.id, {
         onSuccess: () => {
+          success(`「${todo.title}」を削除しました`, "削除完了");
           router.push("/todos");
+        },
+        onError: (error) => {
+          showError(`削除に失敗しました: ${error.message}`, "エラー");
         },
       });
     }

@@ -6,6 +6,7 @@ import { Button } from "@/src/design-system/components";
 import { ArrowLeft } from "lucide-react";
 import { TodoForm } from "../../TodoForm";
 import { useTodo, useUpdateTodo } from "@/lib/hooks/useTodos";
+import { useToastStore } from "@/lib/store/useToastStore";
 import type { CreateTodoInput } from "@/lib/types/todo";
 
 /**
@@ -21,13 +22,18 @@ export default function TodoEditPage({ params }: { params: Promise<{ id: string 
   const { id } = use(params);
   const { data: todo, isLoading, error } = useTodo(id);
   const updateMutation = useUpdateTodo();
+  const { success, error: showError } = useToastStore();
 
   const handleSubmit = (data: CreateTodoInput) => {
     updateMutation.mutate(
       { id, data },
       {
         onSuccess: () => {
+          success(`「${data.title}」を更新しました`, "更新完了");
           router.push(`/todos/${id}`);
+        },
+        onError: (error) => {
+          showError(`更新に失敗しました: ${error.message}`, "エラー");
         },
       }
     );

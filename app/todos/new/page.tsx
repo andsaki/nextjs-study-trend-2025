@@ -5,6 +5,7 @@ import { Button } from "@/src/design-system/components";
 import { ArrowLeft } from "lucide-react";
 import { TodoForm } from "../TodoForm";
 import { useCreateTodo } from "@/lib/hooks/useTodos";
+import { useToastStore } from "@/lib/store/useToastStore";
 import type { CreateTodoInput } from "@/lib/types/todo";
 
 /**
@@ -18,11 +19,16 @@ import type { CreateTodoInput } from "@/lib/types/todo";
 export default function TodoCreatePage() {
   const router = useRouter();
   const createMutation = useCreateTodo();
+  const { success, error: showError } = useToastStore();
 
   const handleSubmit = (data: CreateTodoInput) => {
     createMutation.mutate(data, {
       onSuccess: (newTodo) => {
+        success(`「${newTodo.title}」を作成しました`, "作成完了");
         router.push(`/todos/${newTodo.id}`);
+      },
+      onError: (error) => {
+        showError(`作成に失敗しました: ${error.message}`, "エラー");
       },
     });
   };

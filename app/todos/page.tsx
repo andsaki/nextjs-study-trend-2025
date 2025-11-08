@@ -6,8 +6,9 @@ import { Button, Loading, Modal } from "@/src/design-system/components";
 import { Plus, Search as SearchIcon } from "lucide-react";
 import { SearchForm } from "./SearchForm";
 import { TodoList } from "./TodoList";
-import { useTodosSuspense, useUpdateTodo, useDeleteTodo } from "@/lib/hooks/useTodos";
+import { useTodos, useUpdateTodo, useDeleteTodo } from "@/lib/hooks/useTodos";
 import { useTodoSearchStore } from "@/lib/store/useTodoSearchStore";
+import { useToastStore } from "@/lib/store/useToastStore";
 import { ErrorBoundary } from "@/app/components/ErrorBoundary";
 import { ConfirmModal } from "@/app/components/ConfirmModal";
 import type { TodoSearchParams } from "@/lib/api/todos";
@@ -56,9 +57,10 @@ function TodosErrorFallback({ error }: { error: Error }) {
 function TodosContent({ searchParams }: { searchParams: TodoSearchParams }) {
   const router = useRouter();
   const [deleteTarget, setDeleteTarget] = useState<Todo | null>(null);
+  const { success, error: showError } = useToastStore();
 
   // Suspense対応フック（isLoading, errorは不要）
-  const { data: todos } = useTodosSuspense(searchParams);
+  const { data: todos } = useTodos(searchParams);
   const updateMutation = useUpdateTodo();
   const deleteMutation = useDeleteTodo();
 
@@ -71,12 +73,30 @@ function TodosContent({ searchParams }: { searchParams: TodoSearchParams }) {
     deleteMutation.mutate(deleteTarget.id, {
       onSuccess: () => {
         setDeleteTarget(null);
+        success(`「${deleteTarget.title}」を削除しました`, "削除完了");
+      },
+      onError: (error) => {
+        showError(`削除に失敗しました: ${error.message}`, "エラー");
       },
     });
   };
 
   const handleToggleComplete = (id: string, completed: boolean) => {
-    updateMutation.mutate({ id, data: { completed } });
+    const todo = todos.find((t) => t.id === id);
+    updateMutation.mutate(
+      { id, data: { completed } },
+      {
+        onSuccess: () => {
+          success(
+            completed ? `「${todo?.title}」を完了にしました` : `「${todo?.title}」を未完了に戻しました`,
+            completed ? "完了" : "未完了"
+          );
+        },
+        onError: (error) => {
+          showError(`更新に失敗しました: ${error.message}`, "エラー");
+        },
+      }
+    );
   };
 
   const handleEdit = (id: string) => {

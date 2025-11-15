@@ -1,32 +1,24 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { Text } from "@/src/design-system/components/Text";
 import { colors, spacing, radii } from "@/src/design-system/tokens";
-import { useState } from "react";
+import { examplesData } from "./data";
 
-const examples = [
-  {
-    title: "ログインフォーム",
-    description: "React Hook Form + Zodを使用したログインフォームの実装例",
-    href: "/examples/login",
-    tags: ["Form", "Validation", "Zod"],
-  },
-  {
-    title: "お問い合わせフォーム",
-    description: "FormWithHook + useTransitionを使用した複雑なフォームの実装例",
-    href: "/examples/contact",
-    tags: ["Form", "useTransition", "FormWithHook"],
-  },
-  {
-    title: "useTransition学習",
-    description: "非ブロッキング状態更新によるUI応答性向上のデモ",
-    href: "/examples/use-transition",
-    tags: ["useTransition", "Performance", "React 18"],
-  },
-];
+type Example = {
+  title: string;
+  description: string;
+  tags: string[];
+  href: string;
+};
 
-function ExampleCard({ example }: { example: typeof examples[0] }) {
+const exampleList: Example[] = Object.entries(examplesData).map(([slug, meta]) => ({
+  ...meta,
+  href: `/examples/${slug}`,
+}));
+
+function ExampleCard({ example }: { example: Example }) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -94,7 +86,7 @@ export default function ExamplesPage() {
           gap: spacing.scale[6],
         }}
       >
-        {examples.map((example) => (
+        {exampleList.map((example) => (
           <ExampleCard key={example.href} example={example} />
         ))}
       </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState, useTransition } from "react";
 import type { ChangeEvent, CSSProperties, ReactNode } from "react";
 import { colors, spacing, typography, radii, shadows } from "@/src/design-system/tokens";
@@ -179,6 +180,28 @@ const styles = {
     padding: `0 ${spacing.scale[1]}`,
     display: "inline-block",
   },
+  navCard: {
+    marginTop: spacing.scale[6],
+    padding: spacing.card.padding.sm,
+    borderRadius: radii.card.sm,
+    border: `1px solid ${colors.border.default}`,
+    backgroundColor: colors.background.paper,
+    boxShadow: shadows.component.card,
+    display: "flex",
+    flexDirection: "column",
+    gap: spacing.scale[2],
+  },
+  navTitle: {
+    ...typography.body.base,
+    fontWeight: typography.fontWeight.semibold,
+    margin: 0,
+  },
+  navLink: {
+    color: colors.brand.primary,
+    fontWeight: typography.fontWeight.semibold,
+    textDecoration: "underline",
+    width: "fit-content",
+  },
 } satisfies Record<string, CSSProperties>;
 
 const Section = ({ title, description, children }: { title: string; description: string; children: ReactNode }) => (
@@ -309,6 +332,16 @@ export default function UseTransitionExamplePage() {
           </li>
         </ul>
       </section>
+
+      <nav style={styles.navCard}>
+        <p style={styles.navTitle}>他の学習デモも確認する</p>
+        <Link href="/examples/use-memo-use-callback" style={styles.navLink}>
+          useMemo & useCallback の比較ページへ移動
+        </Link>
+        <Link href="/examples" style={styles.navLink}>
+          Examples 一覧に戻る
+        </Link>
+      </nav>
     </main>
   );
 }

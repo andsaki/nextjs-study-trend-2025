@@ -1,15 +1,21 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import type { SubmitHandler, UseFormReturn, FieldValues, Path } from 'react-hook-form';
+import type {
+  SubmitHandler,
+  UseFormReturn,
+  Path,
+  Resolver,
+  FieldValues,
+  DefaultValues,
+} from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import type { ZodType } from 'zod';
 import { Input } from './Input';
 import { Button } from './Button';
 import { spacing } from '../tokens';
 import type { WCAGLevel } from '../tokens';
 
-export interface FormFieldConfig<T extends FieldValues> {
+export interface FormFieldConfig<T> {
   /** フィールド名 */
   name: Path<T>;
   /** ラベル */
@@ -26,13 +32,13 @@ export interface FormFieldConfig<T extends FieldValues> {
   size?: 'sm' | 'md' | 'lg';
 }
 
-export interface FormProps<T extends FieldValues> {
+export interface FormProps<T extends z.ZodType<FieldValues>> {
   /** Zodスキーマ */
-  schema: ZodType<T>;
+  schema: T;
   /** フィールド設定 */
-  fields: FormFieldConfig<T>[];
+  fields: FormFieldConfig<z.infer<T>>[];
   /** 送信時のコールバック */
-  onSubmit: SubmitHandler<T>;
+  onSubmit: SubmitHandler<z.infer<T>>;
   /** 送信ボタンのテキスト @default '送信' */
   submitText?: string;
   /** 送信ボタンのバリアント @default 'primary' */
@@ -42,7 +48,7 @@ export interface FormProps<T extends FieldValues> {
   /** WCAGレベル @default 'AA' */
   wcagLevel?: WCAGLevel;
   /** デフォルト値 */
-  defaultValues?: T;
+  defaultValues?: z.infer<T>;
   /** フォームのカスタムスタイル */
   style?: React.CSSProperties;
   /** 送信中の状態 */
@@ -58,7 +64,7 @@ export interface FormProps<T extends FieldValues> {
  * - アクセシブルなエラー表示
  * - カスタマイズ可能なフィールド設定
  */
-export function Form<T extends FieldValues>({
+export function Form<T extends z.ZodType<FieldValues>>({
   schema,
   fields,
   onSubmit,
@@ -70,15 +76,15 @@ export function Form<T extends FieldValues>({
   style,
   isSubmitting = false,
 }: FormProps<T>) {
+  type FormData = z.output<T>;
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } = useForm<any>({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    resolver: zodResolver(schema as any),
-    defaultValues: defaultValues as any,
+  } = useForm<FormData>({
+    resolver: zodResolver(schema as never) as unknown as Resolver<FormData>,
+    defaultValues: defaultValues as DefaultValues<FormData>,
   });
 
   const formStyle: React.CSSProperties = {

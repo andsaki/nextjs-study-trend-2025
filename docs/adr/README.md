@@ -10,6 +10,9 @@
 | [002](./002-zustand-for-ui-state.md) | Zustand採用によるUI状態管理 | 採用 | 2025-11-06 |
 | [003](./003-tanstack-query-vs-swr.md) | TanStack Query vs SWR 比較と選定理由 | 採用 | 2025-11-06 |
 | [004](./004-vitest-for-unit-testing.md) | Vitest採用によるユニット・インテグレーションテスト | 採用 | 2025-11-08 |
+| [005](./005-react-hook-form-for-forms.md) | React Hook Formによるフォーム管理 | 採用 | 2025-11-11 |
+| [006](./006-drizzle-vs-prisma-for-database-orm.md) | Drizzle vs Prisma比較とDrizzle ORM採用 | 採用 | 2025-11-14 |
+| [007](./007-use-transition-for-non-blocking-updates.md) | useTransitionによる非ブロッキング状態更新 | 採用 | 2025-11-15 |
 
 ## 技術スタックの全体像
 

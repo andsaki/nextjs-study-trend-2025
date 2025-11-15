@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -12,7 +12,7 @@ const contactSchema = z.object({
   name: z.string().min(1, "お名前は必須です").max(50, "お名前は50文字以内で入力してください"),
   email: z.string().email("有効なメールアドレスを入力してください"),
   category: z.enum(["general", "support", "feedback", "other"], {
-    errorMap: () => ({ message: "カテゴリーを選択してください" }),
+    message: "カテゴリーを選択してください",
   }),
   subject: z
     .string()
@@ -30,7 +30,7 @@ const contactSchema = z.object({
 type ContactInput = z.infer<typeof contactSchema>;
 
 export default function ContactPage() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const [result, setResult] = useState<{ success: boolean; message: string } | null>(null);
 
   const form = useForm<ContactInput>({
@@ -46,21 +46,22 @@ export default function ContactPage() {
   });
 
   const handleSubmit = async (data: ContactInput) => {
-    setIsSubmitting(true);
     setResult(null);
 
-    // APIコールのシミュレーション
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    // useTransitionで非緊急な更新としてマーク
+    startTransition(async () => {
+      // APIコールのシミュレーション
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    console.log("お問い合わせ内容:", data);
-    setResult({
-      success: true,
-      message: "お問い合わせを送信しました。ご連絡ありがとうございます！",
+      console.log("お問い合わせ内容:", data);
+      setResult({
+        success: true,
+        message: "お問い合わせを送信しました。ご連絡ありがとうございます！",
+      });
+
+      // フォームをリセット
+      form.reset();
     });
-
-    // フォームをリセット
-    form.reset();
-    setIsSubmitting(false);
   };
 
   const categoryOptions = [
@@ -75,9 +76,30 @@ export default function ContactPage() {
       <h1 style={{ fontSize: "1.875rem", fontWeight: 700, marginBottom: "0.5rem" }}>
         お問い合わせ
       </h1>
-      <p style={{ color: "#666", marginBottom: "2rem" }}>
+      <p style={{ color: "#666", marginBottom: "1rem" }}>
         ご質問やご意見がございましたら、以下のフォームよりお気軽にお問い合わせください。
       </p>
+
+      {/* useTransitionの説明 */}
+      <div style={{
+        padding: "1rem",
+        marginBottom: "1.5rem",
+        backgroundColor: "#e3f2fd",
+        borderRadius: "8px",
+        borderLeft: "4px solid #1976d2"
+      }}>
+        <div style={{ fontWeight: 600, marginBottom: "0.5rem", color: "#1976d2" }}>
+          💡 useTransitionを使用
+        </div>
+        <div style={{ fontSize: "0.875rem", color: "#555" }}>
+          送信処理を非ブロッキングで実行。送信中でもフォーム入力が可能です。
+          {isPending && (
+            <span style={{ display: "block", marginTop: "0.5rem", color: "#1976d2", fontWeight: 500 }}>
+              ⏳ 送信処理中...（でも他の操作ができます！）
+            </span>
+          )}
+        </div>
+      </div>
 
       {result && (
         <div
@@ -176,8 +198,8 @@ export default function ContactPage() {
                 type="submit"
                 variant="primary"
                 size="md"
-                isLoading={isSubmitting}
-                disabled={isSubmitting}
+                isLoading={isPending}
+                disabled={isPending}
                 style={{ width: "100%" }}
               >
                 送信する

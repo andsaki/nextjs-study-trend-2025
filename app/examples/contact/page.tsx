@@ -1,11 +1,13 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { FormWithHook } from "@/src/design-system/components/Form";
-import { Input, TextArea, Select, Button } from "@/src/design-system/components";
+import { Input, TextArea, Select, Button, InfoBox } from "@/src/design-system/components";
+import { useToastStore } from "@/lib/store/useToastStore";
+import { ToastContainer } from "@/app/components/ToastContainer";
 
 // お問い合わせフォームのスキーマ
 const contactSchema = z.object({
@@ -31,7 +33,7 @@ type ContactInput = z.infer<typeof contactSchema>;
 
 export default function ContactPage() {
   const [isPending, startTransition] = useTransition();
-  const [result, setResult] = useState<{ success: boolean; message: string } | null>(null);
+  const { success } = useToastStore();
 
   const form = useForm<ContactInput>({
     resolver: zodResolver(contactSchema),
@@ -46,18 +48,14 @@ export default function ContactPage() {
   });
 
   const handleSubmit = async (data: ContactInput) => {
-    setResult(null);
-
     // useTransitionで非緊急な更新としてマーク
     startTransition(async () => {
       // APIコールのシミュレーション
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
       console.log("お問い合わせ内容:", data);
-      setResult({
-        success: true,
-        message: "お問い合わせを送信しました。ご連絡ありがとうございます！",
-      });
+
+      success("お問い合わせを送信しました。ご連絡ありがとうございます！");
 
       // フォームをリセット
       form.reset();
@@ -72,49 +70,24 @@ export default function ContactPage() {
   ];
 
   return (
-    <div style={{ maxWidth: "600px", margin: "2rem auto", padding: "0 1rem" }}>
-      <h1 style={{ fontSize: "1.875rem", fontWeight: 700, marginBottom: "0.5rem" }}>
-        お問い合わせ
-      </h1>
-      <p style={{ color: "#666", marginBottom: "1rem" }}>
-        ご質問やご意見がございましたら、以下のフォームよりお気軽にお問い合わせください。
-      </p>
+    <>
+      <ToastContainer />
+      <div style={{ maxWidth: "600px", margin: "2rem auto", padding: "0 1rem" }}>
+        <h1 style={{ fontSize: "1.875rem", fontWeight: 700, marginBottom: "0.5rem" }}>
+          お問い合わせ
+        </h1>
+        <p style={{ color: "#666", marginBottom: "1rem" }}>
+          ご質問やご意見がございましたら、以下のフォームよりお気軽にお問い合わせください。
+        </p>
 
-      {/* useTransitionの説明 */}
-      <div style={{
-        padding: "1rem",
-        marginBottom: "1.5rem",
-        backgroundColor: "#e3f2fd",
-        borderRadius: "8px",
-        borderLeft: "4px solid #1976d2"
-      }}>
-        <div style={{ fontWeight: 600, marginBottom: "0.5rem", color: "#1976d2" }}>
-          💡 useTransitionを使用
-        </div>
-        <div style={{ fontSize: "0.875rem", color: "#555" }}>
-          送信処理を非ブロッキングで実行。送信中でもフォーム入力が可能です。
+        <InfoBox variant="tip" icon="💡" title="useTransition + Toast通知" style={{ marginBottom: "1.5rem" }}>
+          送信処理を非ブロッキングで実行し、結果はトースト通知で表示します。
           {isPending && (
-            <span style={{ display: "block", marginTop: "0.5rem", color: "#1976d2", fontWeight: 500 }}>
+            <div style={{ marginTop: "0.5rem", fontWeight: 500 }}>
               ⏳ 送信処理中...（でも他の操作ができます！）
-            </span>
+            </div>
           )}
-        </div>
-      </div>
-
-      {result && (
-        <div
-          style={{
-            padding: "1rem",
-            marginBottom: "1.5rem",
-            backgroundColor: result.success ? "#e8f5e9" : "#ffebee",
-            color: result.success ? "#2e7d32" : "#c62828",
-            borderRadius: "8px",
-            border: `1px solid ${result.success ? "#4caf50" : "#ef5350"}`,
-          }}
-        >
-          {result.message}
-        </div>
-      )}
+        </InfoBox>
 
       <FormWithHook form={form} onSubmit={handleSubmit}>
         {({ register, formState: { errors } }) => (
@@ -208,6 +181,7 @@ export default function ContactPage() {
           </>
         )}
       </FormWithHook>
-    </div>
+      </div>
+    </>
   );
 }

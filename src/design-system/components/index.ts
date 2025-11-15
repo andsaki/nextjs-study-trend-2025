@@ -24,3 +24,6 @@ export type { ModalProps } from './Modal';
 
 export { Toast } from './Toast';
 export type { ToastProps, ToastType } from './Toast';
+
+export { InfoBox } from './InfoBox';
+export type { InfoBoxProps, InfoBoxVariant } from './InfoBox';

@@ -19,7 +19,18 @@ export const todoSchema = z.object({
 /**
  * Todo作成用スキーマ
  */
-export const createTodoSchema = todoSchema.omit({ completed: true });
+export const createTodoSchema = z.object({
+  title: z
+    .string()
+    .min(1, "タイトルは必須です")
+    .max(100, "タイトルは100文字以内で入力してください"),
+  description: z
+    .string()
+    .max(500, "説明は500文字以内で入力してください")
+    .optional()
+    .or(z.literal("")),
+  priority: z.enum(["low", "medium", "high"]),
+});
 
 /**
  * Todo更新用スキーマ
@@ -42,7 +53,11 @@ export interface Todo {
 /**
  * Todo作成用の型
  */
-export type CreateTodoInput = z.infer<typeof createTodoSchema>;
+export interface CreateTodoInput {
+  title: string;
+  description?: string;
+  priority: "low" | "medium" | "high";
+}
 
 /**
  * Todo更新用の型

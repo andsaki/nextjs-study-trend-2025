@@ -123,7 +123,7 @@ export default function TodoEditPage({ params }: { params: Promise<{ id: string 
             variant="outline"
             size="md"
             icon={<ArrowLeft size={16} />}
-            onClick={() => router.push(`/todos/${params.id}`)}
+            onClick={() => router.push(`/todos/${id}`)}
             style={{ marginBottom: "1rem" }}
           >
             詳細に戻る

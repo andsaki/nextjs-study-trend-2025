@@ -164,6 +164,14 @@ function TodosContent({ searchParams }: { searchParams: TodoSearchParams }) {
  * - 他のページへのナビゲーション
  */
 export default function TodosPage() {
+  return (
+    <Suspense fallback={<TodosLoadingFallback />}>
+      <TodosPageContent />
+    </Suspense>
+  );
+}
+
+function TodosPageContent() {
   const router = useRouter();
   const searchParamsFromUrl = useSearchParams();
   const [isMobileModalOpen, setIsMobileModalOpen] = useState(false);

@@ -8,9 +8,10 @@ import type { TodoSearchParams } from "@/lib/api/todos";
 interface SearchFormProps {
   onSearch: (params: TodoSearchParams) => void;
   defaultValues?: TodoSearchParams;
+  isPending?: boolean;
 }
 
-export function SearchForm({ onSearch, defaultValues }: SearchFormProps) {
+export function SearchForm({ onSearch, defaultValues, isPending = false }: SearchFormProps) {
   const { register, handleSubmit, reset, watch } = useForm<TodoSearchParams>({
     defaultValues: defaultValues || {
       q: "",
@@ -143,6 +144,7 @@ export function SearchForm({ onSearch, defaultValues }: SearchFormProps) {
             size="md"
             onClick={handleReset}
             icon={<X size={16} />}
+            disabled={isPending}
           >
             クリア
           </Button>
@@ -153,10 +155,17 @@ export function SearchForm({ onSearch, defaultValues }: SearchFormProps) {
             icon={
               sortOrder === "asc" ? <SortAsc size={16} /> : <SortDesc size={16} />
             }
+            isLoading={isPending}
+            disabled={isPending}
           >
             検索
           </Button>
         </div>
+        {isPending && (
+          <p style={{ marginTop: "0.5rem", fontSize: "0.875rem", color: "#757575" }}>
+            useTransitionで検索条件を適用中です...
+          </p>
+        )}
       </div>
     </form>
   );

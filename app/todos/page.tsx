@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useDeferredValue, useEffect, useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button, Loading, Modal } from "@/src/design-system/components";
 import { Plus, Search as SearchIcon } from "lucide-react";
@@ -167,6 +167,7 @@ export default function TodosPage() {
   const router = useRouter();
   const searchParamsFromUrl = useSearchParams();
   const [isMobileModalOpen, setIsMobileModalOpen] = useState(false);
+  const [isRouting, startTransition] = useTransition();
 
   // Zustand store
   const {
@@ -204,6 +205,9 @@ export default function TodosPage() {
     }
   }, [searchParamsFromUrl, setSearchParams, setShowSearch]);
 
+  // useDeferredValueで検索条件の更新を遅延させ、重い再フェッチによるUIラグを防ぐ
+  const deferredSearchParams = useDeferredValue(searchParams);
+
   const handleSearch = (params: TodoSearchParams) => {
     // Zustand storeに保存
     setSearchParams(params);
@@ -216,7 +220,10 @@ export default function TodosPage() {
     if (params.sortBy) urlParams.set("sortBy", params.sortBy);
     if (params.sortOrder) urlParams.set("sortOrder", params.sortOrder);
 
-    router.push(`/todos?${urlParams.toString()}`);
+    // ルーター更新を低優先度に落としてUIの即応性を維持
+    startTransition(() => {
+      router.push(`/todos?${urlParams.toString()}`);
+    });
 
     // モバイルモーダルを閉じる
     setIsMobileModalOpen(false);
@@ -259,21 +266,26 @@ export default function TodosPage() {
           title="検索・フィルター"
           size="md"
         >
-          <SearchForm onSearch={handleSearch} defaultValues={searchParams} />
+          <SearchForm onSearch={handleSearch} defaultValues={searchParams} isPending={isRouting} />
         </Modal>
 
         {showSearch && (
           <div className={styles.searchFormWrapper}>
-            <SearchForm onSearch={handleSearch} defaultValues={searchParams} />
+            <SearchForm onSearch={handleSearch} defaultValues={searchParams} isPending={isRouting} />
           </div>
         )}
 
         {/* Todoリスト（Suspense + ErrorBoundary対応） */}
         <ErrorBoundary fallback={(error) => <TodosErrorFallback error={error} />}>
           <Suspense fallback={<TodosLoadingFallback />}>
-            <TodosContent searchParams={searchParams} />
+            <TodosContent searchParams={deferredSearchParams} />
           </Suspense>
         </ErrorBoundary>
+        {isRouting && (
+          <p style={{ marginTop: "1rem", textAlign: "center", color: "#757575" }}>
+            検索条件を適用中です（useTransition）
+          </p>
+        )}
       </div>
     </div>
   );

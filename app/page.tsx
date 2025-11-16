@@ -263,19 +263,12 @@ const features = [
     href: "/todos",
     buttonText: "Todos を開く",
   },
-  {
-    icon: <Layers size={24} />,
-    title: "UI Components",
-    description: "デザインシステムに沿った再利用可能なコンポーネント群。Tokensを使ったスタイリングを確認できます。",
-    href: "/components",
-    buttonText: "Components ガイド",
-  },
 ];
 
 const heroStats = [
-  { value: "20+", label: "UIパターン" },
-  { value: "10", label: "学習モジュール" },
-  { value: "3", label: "フルスタック実装" },
+  { value: "10+", label: "Examplesデモ" },
+  { value: "5+", label: "学習モジュール" },
+  { value: "2", label: "フルスタック実装" },
 ];
 
 const tracks = [
@@ -297,11 +290,6 @@ const tracks = [
 ];
 
 const resources = [
-  {
-    title: "Components カタログ",
-    description: "Buttonやフォームなど再利用パターンの実装方針をまとめています。",
-    href: "/components",
-  },
   {
     title: "Examples ワークショップ",
     description: "Hooksやフォームデモなど、即実行できる教材を一覧できます。",
@@ -327,13 +315,13 @@ export default function Home() {
               フルスタック実装を組み合わせて学べます。
             </p>
             <div style={styles.heroActions}>
-              <Link href="/components" style={styles.heroPrimaryLink}>
+              <Link href="/examples" style={styles.heroPrimaryLink}>
                 <Button variant="primary" size="lg" icon={<ArrowRight size={18} />}>
-                  コンポーネントガイドを開く
+                  Examples を見る
                 </Button>
               </Link>
-              <Link href="/examples" style={styles.heroSecondaryLink}>
-                演習 Examples を確認する →
+              <Link href="/todos" style={styles.heroSecondaryLink}>
+                Todos アプリを試す →
               </Link>
             </div>
           </div>

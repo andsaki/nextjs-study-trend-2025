@@ -25,6 +25,16 @@ export const examplesData: Record<string, ExampleInfo> = {
     description: "メモ化による再計算・再レンダー最適化を可視化するデモ。",
     tags: ["useMemo", "useCallback", "Performance"],
   },
+  "use-deferred-value": {
+    title: "useDeferredValue検索",
+    description: "重いリストフィルターを遅延させてUIレスポンスを保つ検索インターフェース。",
+    tags: ["useDeferredValue", "Suspense", "Performance"],
+  },
+  "server-actions-optimistic": {
+    title: "Server Actions + Optimistic UI",
+    description: "サーバーアクションを用いたタスク登録とuseOptimisticによる即時UI反映。",
+    tags: ["Server Actions", "useOptimistic", "App Router"],
+  },
 };
 
 export type ExamplesData = typeof examplesData;

@@ -35,6 +35,11 @@ export const examplesData: Record<string, ExampleInfo> = {
     description: "サーバーアクションを用いたタスク登録とuseOptimisticによる即時UI反映。",
     tags: ["Server Actions", "useOptimistic", "App Router"],
   },
+  "flight-payload-demo": {
+    title: "App Router & Flight Payload",
+    description: "クライアント側画面遷移がCSRではない理由を実際に体験できるデモ。",
+    tags: ["App Router", "RSC", "Flight Payload"],
+  },
 };
 
 export type ExamplesData = typeof examplesData;

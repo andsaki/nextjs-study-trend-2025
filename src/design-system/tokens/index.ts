@@ -10,6 +10,7 @@ export { typography } from './typography';
 export { spacing } from './spacing';
 export { shadows } from './shadows';
 export { radii } from './radii';
+export { borders } from './borders';
 export { transitions } from './transitions';
 export { accessibilityLevels } from './accessibility-levels';
 export { breakpoints } from './breakpoints';
@@ -21,6 +22,7 @@ export type { TypographyTokens } from './typography';
 export type { SpacingTokens } from './spacing';
 export type { ShadowTokens } from './shadows';
 export type { RadiiTokens } from './radii';
+export type { BorderTokens } from './borders';
 export type { TransitionTokens } from './transitions';
 export type { WCAGLevel, AccessibilityLevels } from './accessibility-levels';
 export type { Breakpoints } from './breakpoints';
@@ -32,6 +34,7 @@ import { typography } from './typography';
 import { spacing } from './spacing';
 import { shadows } from './shadows';
 import { radii } from './radii';
+import { borders } from './borders';
 import { transitions } from './transitions';
 import { accessibilityLevels } from './accessibility-levels';
 import { breakpoints } from './breakpoints';
@@ -47,6 +50,7 @@ export const tokens = {
   spacing,
   shadows,
   radii,
+  borders,
   transitions,
   accessibilityLevels,
   breakpoints,

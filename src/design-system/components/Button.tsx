@@ -46,7 +46,9 @@ export const Button: React.FC<ButtonProps> = ({
 }) => {
   // WCAGレベルに応じたカラートークンを取得
   const levelColors = accessibilityLevels.button[wcagLevel];
-  const levelFocus = accessibilityLevels.focus[wcagLevel];
+  const levelFocus = variant === 'danger'
+    ? accessibilityLevels.dangerFocus[wcagLevel]
+    : accessibilityLevels.focus[wcagLevel];
 
   // キーボード操作によるフォーカスかどうかを追跡
   const [isKeyboardFocus, setIsKeyboardFocus] = React.useState(false);
@@ -102,7 +104,7 @@ export const Button: React.FC<ButtonProps> = ({
       : levelColors.primary.bg,
     danger: disabled
       ? colors.button.danger.bgDisabled
-      : colors.button.danger.border,
+      : levelColors.danger.border,
   };
 
   // バリアントスタイル: WCAGレベルとバリアントに応じた見た目を定義
@@ -140,10 +142,10 @@ export const Button: React.FC<ButtonProps> = ({
     danger: {
       backgroundColor: disabled
         ? colors.button.danger.bgDisabled
-        : colors.button.danger.bg,
+        : levelColors.danger.bg,
       color: disabled
         ? colors.button.danger.textDisabled
-        : colors.button.danger.text,
+        : levelColors.danger.text,
       borderWidth: "1px",
       borderStyle: "solid",
     },

@@ -148,7 +148,6 @@ export const Modal: React.FC<ModalProps> = ({
           padding: spacing.scale[4],
         }}
         onClick={onClose}
-        aria-hidden="true"
       >
         {/* ダイアログ */}
         <div

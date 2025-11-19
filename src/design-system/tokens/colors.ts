@@ -437,8 +437,8 @@ export const colors = {
  */
 export const darkText = {
   primary: primitive.gray[50], // 主要テキスト（ほぼ白）
-  secondary: primitive.gray[300], // 副次的なテキスト
-  tertiary: primitive.gray[400], // 補助テキスト
+  secondary: primitive.gray[100], // 副次的なテキスト
+  tertiary: primitive.gray[200], // 補助テキスト
   disabled: primitive.gray[600], // 無効化されたテキスト
   inverse: primitive.gray[900], // 反転テキスト（明るい背景上で使用）
   link: primitive.blue[400], // リンクテキスト

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { colors, spacing, typography, radii, accessibilityLevels } from "../tokens";
+import { primitive } from "../tokens/colors";
 import type { WCAGLevel } from "../tokens";
 
 export interface RadioProps
@@ -88,7 +89,7 @@ export const Radio: React.FC<RadioProps> = ({
             width: "20px",
             height: "20px",
             cursor: disabled ? "not-allowed" : "pointer",
-            accentColor: colors.button.primary.bg,
+            accentColor: primitive.blue[500],
             opacity: disabled ? 0.5 : 1,
             margin: 0,
           }}
@@ -104,6 +105,9 @@ export const Radio: React.FC<RadioProps> = ({
           }}
         />
         <style>{`
+          input[type="radio"] {
+            accent-color: ${primitive.blue[500]};
+          }
           [data-focused="true"] {
             outline: ${levelFocus.outlineWidth} solid ${levelFocus.outline};
             outline-offset: ${levelFocus.outlineOffset};
@@ -118,7 +122,7 @@ export const Radio: React.FC<RadioProps> = ({
           style={{
             fontSize: typography.fontSize.base,
             fontWeight: typography.fontWeight.medium,
-            color: disabled ? colors.text.disabled : colors.text.primary,
+            color: disabled ? primitive.gray[400] : primitive.gray[900],
             cursor: disabled ? "not-allowed" : "pointer",
             userSelect: "none",
           }}
@@ -131,7 +135,7 @@ export const Radio: React.FC<RadioProps> = ({
             style={{
               margin: `${spacing.scale[1]} 0 0 0`,
               fontSize: typography.fontSize.sm,
-              color: colors.text.secondary,
+              color: primitive.gray[600],
               lineHeight: typography.lineHeight.normal,
             }}
           >

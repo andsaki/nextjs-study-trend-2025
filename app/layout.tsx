@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { QueryProvider } from "./providers/QueryProvider";
+import { ThemeProviders } from "./providers/ThemeProviders";
 import { BreadcrumbNav } from "./components/BreadcrumbNav";
 import { ToastContainer } from "./components/ToastContainer";
 import "./globals.css";
@@ -31,9 +32,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <QueryProvider>
-          <BreadcrumbNav />
-          {children}
-          <ToastContainer />
+          <ThemeProviders>
+            <BreadcrumbNav />
+            {children}
+            <ToastContainer />
+          </ThemeProviders>
         </QueryProvider>
       </body>
     </html>

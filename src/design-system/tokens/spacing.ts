@@ -52,6 +52,8 @@
  */
 export const scale = {
   0: '0', // 余白なし
+  0.5: '0.125rem', // 2px - 極小単位（outline offset等）
+  0.75: '0.1875rem', // 3px - 微調整用（underline offset等）
   1: '0.25rem', // 4px - 最小単位
   2: '0.5rem', // 8px - 基本単位
   3: '0.75rem', // 12px - ボタンの縦パディング

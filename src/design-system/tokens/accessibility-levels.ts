@@ -73,6 +73,44 @@ export const focusStyles = {
 } as const;
 
 /**
+ * Dangerボタン専用フォーカススタイル（レベル別）
+ */
+export const dangerFocusStyles = {
+  /**
+   * レベルA: 最低限のフォーカス表示（赤系）
+   */
+  A: {
+    background: 'transparent',
+    outline: primitive.red[300], // 薄い赤
+    outlineWidth: '0.125rem', // 2px
+    outlineOffset: '0',
+    text: primitive.black,
+  },
+
+  /**
+   * レベルAA: 標準的なフォーカス表示（赤系）
+   */
+  AA: {
+    background: primitive.red[50], // 薄い赤背景
+    outline: primitive.red[700], // 濃い赤
+    outlineWidth: '0.1875rem', // 3px
+    outlineOffset: '0.125rem', // 2px
+    text: primitive.gray[900],
+  },
+
+  /**
+   * レベルAAA: 最高レベルのフォーカス表示（黄色 - 共通）
+   */
+  AAA: {
+    background: primitive.yellow, // 黄色
+    outline: primitive.black,
+    outlineWidth: '0.25rem', // 4px
+    outlineOffset: '0.125rem', // 2px
+    text: primitive.black,
+  },
+} as const;
+
+/**
  * ボタンカラー（レベル別）
  */
 export const buttonColors = {
@@ -91,6 +129,11 @@ export const buttonColors = {
       text: primitive.gray[700], // コントラスト比: 3.2:1
       border: primitive.gray[300],
     },
+    danger: {
+      bg: primitive.red[400], // コントラスト比: 3.2:1
+      text: primitive.white,
+      border: primitive.red[400],
+    },
   },
 
   /**
@@ -108,6 +151,11 @@ export const buttonColors = {
       text: primitive.gray[900], // コントラスト比: 16.1:1
       border: primitive.gray[400],
     },
+    danger: {
+      bg: primitive.red[600], // コントラスト比: 4.5:1
+      text: primitive.white,
+      border: primitive.red[600],
+    },
   },
 
   /**
@@ -124,6 +172,11 @@ export const buttonColors = {
       bg: primitive.white,
       text: primitive.gray[900], // コントラスト比: 16.1:1
       border: primitive.gray[600],
+    },
+    danger: {
+      bg: primitive.red[700], // コントラスト比: 5.14:1
+      text: primitive.white,
+      border: primitive.red[800],
     },
   },
 } as const;
@@ -336,6 +389,7 @@ export const contrastDemos = {
  */
 export const accessibilityLevels = {
   focus: focusStyles,
+  dangerFocus: dangerFocusStyles,
   button: buttonColors,
   breadcrumbs: breadcrumbsColors,
   text: textColors,

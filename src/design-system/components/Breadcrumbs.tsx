@@ -1,5 +1,5 @@
 import React from 'react';
-import { spacing, typography, accessibilityLevels } from '../tokens';
+import { spacing, typography, accessibilityLevels, borders } from '../tokens';
 import type { WCAGLevel } from '../tokens';
 
 // Context for passing WCAG level to child components
@@ -106,7 +106,7 @@ export const BreadcrumbLink: React.FC<BreadcrumbLinkProps> = ({
     fontSize: typography.fontSize.base,
     lineHeight: typography.lineHeight.normal,
     textDecoration: 'underline',
-    textUnderlineOffset: '0.1875rem',
+    textUnderlineOffset: spacing.scale[0.75],
   };
 
   return (
@@ -117,7 +117,7 @@ export const BreadcrumbLink: React.FC<BreadcrumbLinkProps> = ({
         style={linkStyles}
         onMouseEnter={(e) => {
           e.currentTarget.style.color = levelColors.linkHover;
-          e.currentTarget.style.textDecorationThickness = '0.1875rem';
+          e.currentTarget.style.textDecorationThickness = spacing.scale[0.75];
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.color = levelColors.link;
@@ -126,9 +126,9 @@ export const BreadcrumbLink: React.FC<BreadcrumbLinkProps> = ({
         onFocus={(e) => {
           e.currentTarget.style.backgroundColor = levelColors.focusBackground;
           e.currentTarget.style.color = levelColors.link;
-          e.currentTarget.style.outline = `4px solid ${levelColors.focusOutline}`;
-          e.currentTarget.style.outlineOffset = '0.125rem';
-          e.currentTarget.style.borderRadius = '0.25rem';
+          e.currentTarget.style.outline = `${borders.width.thicker} solid ${levelColors.focusOutline}`;
+          e.currentTarget.style.outlineOffset = spacing.scale[0.5];
+          e.currentTarget.style.borderRadius = spacing.scale[1];
         }}
         onBlur={(e) => {
           e.currentTarget.style.backgroundColor = '';

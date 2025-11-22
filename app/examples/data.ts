@@ -40,6 +40,11 @@ export const examplesData: Record<string, ExampleInfo> = {
     description: "クライアント側画面遷移がCSRではない理由を実際に体験できるデモ。",
     tags: ["App Router", "RSC", "Flight Payload"],
   },
+  "hooks-memo-verification": {
+    title: "Hooks & Memo 検証ページ",
+    description: "useMemo、useCallback、React.memoの挙動を実際に確認できる検証ページ。",
+    tags: ["useMemo", "useCallback", "React.memo", "Performance"],
+  },
 };
 
 export type ExamplesData = typeof examplesData;

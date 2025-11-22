@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ServerComponent } from "./ServerComponent";
 import { ClientComponent } from "./ClientComponent";
 import { ReloadButton } from "./ReloadButton";
+import { ClickableDiagram } from "./ClickableDiagram";
 import { colors, spacing, typography, radii } from "../../../src/design-system/tokens";
 
 export default function FlightPayloadDemoPage() {
@@ -644,7 +645,7 @@ fetch(window.location.href, {
               color: colors.primitive.pink[700],
               marginBottom: spacing.scale[2]
             }}>
-              レンダリング戦略の包括的な比較表
+              📊 レンダリング戦略の比較
             </h3>
             <p style={{
               fontSize: typography.fontSize.sm,
@@ -652,8 +653,7 @@ fetch(window.location.href, {
               marginBottom: spacing.scale[3],
               lineHeight: typography.lineHeight.relaxed
             }}>
-              Webアプリケーションの主要なレンダリング戦略を網羅的に比較。
-              それぞれの特性を理解して、プロジェクトに最適な手法を選択しましょう。
+              主要なレンダリング戦略の特性を比較。どのアプローチを選ぶかで、パフォーマンスや開発体験が大きく変わります。
             </p>
             <div style={{ overflowX: "auto" }}>
               <table style={{
@@ -671,116 +671,55 @@ fetch(window.location.href, {
                       borderBottom: `2px solid ${colors.border.default}`,
                       fontWeight: typography.fontWeight.bold,
                       minWidth: "100px"
-                    }}>項目</th>
+                    }}>戦略</th>
+                    <th style={{
+                      padding: spacing.scale[2],
+                      textAlign: "left",
+                      borderBottom: `2px solid ${colors.border.default}`,
+                      fontWeight: typography.fontWeight.bold,
+                      minWidth: "140px"
+                    }}>どこで動く？</th>
                     <th style={{
                       padding: spacing.scale[2],
                       textAlign: "left",
                       borderBottom: `2px solid ${colors.border.default}`,
                       fontWeight: typography.fontWeight.bold,
                       minWidth: "110px"
-                    }}>MPA<br/><span style={{ fontSize: "0.85em", fontWeight: typography.fontWeight.normal }}>（従来型）</span></th>
+                    }}>画面遷移</th>
                     <th style={{
                       padding: spacing.scale[2],
                       textAlign: "left",
                       borderBottom: `2px solid ${colors.border.default}`,
                       fontWeight: typography.fontWeight.bold,
-                      minWidth: "110px"
-                    }}>SPA/CSR<br/><span style={{ fontSize: "0.85em", fontWeight: typography.fontWeight.normal }}>（React等）</span></th>
+                      minWidth: "90px"
+                    }}>JSバンドル</th>
                     <th style={{
                       padding: spacing.scale[2],
                       textAlign: "left",
                       borderBottom: `2px solid ${colors.border.default}`,
                       fontWeight: typography.fontWeight.bold,
-                      minWidth: "110px"
-                    }}>SSR<br/><span style={{ fontSize: "0.85em", fontWeight: typography.fontWeight.normal }}>（Pages Router）</span></th>
+                      minWidth: "70px"
+                    }}>SEO</th>
                     <th style={{
                       padding: spacing.scale[2],
                       textAlign: "left",
                       borderBottom: `2px solid ${colors.border.default}`,
                       fontWeight: typography.fontWeight.bold,
-                      minWidth: "110px"
-                    }}>ISR<br/><span style={{ fontSize: "0.85em", fontWeight: typography.fontWeight.normal }}>（Next.js）</span></th>
-                    <th style={{
-                      padding: spacing.scale[2],
-                      textAlign: "left",
-                      borderBottom: `2px solid ${colors.border.default}`,
-                      fontWeight: typography.fontWeight.bold,
-                      minWidth: "110px",
-                      backgroundColor: colors.primitive.blue[700]
-                    }}>RSC<br/><span style={{ fontSize: "0.85em", fontWeight: typography.fontWeight.normal }}>（App Router）</span></th>
+                      minWidth: "120px"
+                    }}>適用例</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {/* アーキテクチャ */}
-                  <tr>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`,
-                      fontWeight: typography.fontWeight.bold,
-                      backgroundColor: colors.primitive.gray[100]
-                    }}>アーキテクチャ</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>マルチページ</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>シングルページ</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>ハイブリッド</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>ハイブリッド</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`,
-                      backgroundColor: colors.primitive.blue[50]
-                    }}>ハイブリッド</td>
-                  </tr>
-
-                  {/* 初回レンダリング */}
                   <tr style={{ backgroundColor: colors.background.subtle }}>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`,
-                      fontWeight: typography.fontWeight.bold,
-                      backgroundColor: colors.primitive.gray[100]
-                    }}>初回レンダリング</td>
+                      fontWeight: typography.fontWeight.bold
+                    }}>MPA<br/><span style={{ fontSize: "0.85em", fontWeight: typography.fontWeight.normal }}>(従来型)</span></td>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>サーバー</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>クライアント</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>サーバー</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>サーバー（キャッシュ）</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`,
-                      backgroundColor: colors.primitive.blue[50]
-                    }}>サーバー</td>
-                  </tr>
-
-                  {/* 画面遷移 */}
-                  <tr>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`,
-                      fontWeight: typography.fontWeight.bold,
-                      backgroundColor: colors.primitive.gray[100]
-                    }}>画面遷移</td>
+                    }}>Server（静的配信）</td>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`
@@ -788,303 +727,677 @@ fetch(window.location.href, {
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>クライアント側のみ</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>HTML全体を取得</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>HTML全体を取得</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`,
-                      backgroundColor: colors.primitive.blue[50]
-                    }}>Flight Payload（軽量）</td>
-                  </tr>
-
-                  {/* データフェッチ */}
-                  <tr style={{ backgroundColor: colors.background.subtle }}>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`,
-                      fontWeight: typography.fontWeight.bold,
-                      backgroundColor: colors.primitive.gray[100]
-                    }}>データフェッチ</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>サーバー直接</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>APIリクエスト</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>サーバー直接</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>サーバー直接（キャッシュ）</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`,
-                      backgroundColor: colors.primitive.blue[50]
-                    }}>サーバー直接</td>
-                  </tr>
-
-                  {/* JSバンドルサイズ */}
-                  <tr>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`,
-                      fontWeight: typography.fontWeight.bold,
-                      backgroundColor: colors.primitive.gray[100]
-                    }}>JSバンドル</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`
                     }}>なし〜小</td>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>大きい</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>大きい</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>大きい</td>
+                    }}>◎</td>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`,
-                      backgroundColor: colors.primitive.blue[50]
-                    }}>小〜中（SC除外）</td>
+                      fontSize: "0.9em"
+                    }}>コーポレートサイト</td>
                   </tr>
 
-                  {/* SEO */}
-                  <tr style={{ backgroundColor: colors.background.subtle }}>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`,
-                      fontWeight: typography.fontWeight.bold,
-                      backgroundColor: colors.primitive.gray[100]
-                    }}>SEO</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>◎ 最良</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>△ JS必須</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>◎ 良好</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>◎ 良好</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`,
-                      backgroundColor: colors.primitive.blue[50]
-                    }}>◎ 良好</td>
-                  </tr>
-
-                  {/* インタラクティブ */}
                   <tr>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`,
-                      fontWeight: typography.fontWeight.bold,
-                      backgroundColor: colors.primitive.gray[100]
-                    }}>インタラクティブ性</td>
+                      fontWeight: typography.fontWeight.bold
+                    }}>SPA/CSR<br/><span style={{ fontSize: "0.85em", fontWeight: typography.fontWeight.normal }}>(React等)</span></td>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>△ 限定的</td>
+                    }}>Client（JS実行）</td>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>◎ 高い</td>
+                    }}>Client側のみ</td>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>◎ 高い（ハイドレーション後）</td>
+                    }}>大きい</td>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>◎ 高い（ハイドレーション後）</td>
+                    }}>△</td>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`,
-                      backgroundColor: colors.primitive.blue[50]
-                    }}>◎ 高い（ハイブリッド）</td>
+                      fontSize: "0.9em"
+                    }}>管理画面</td>
                   </tr>
 
-                  {/* 初期表示速度 */}
                   <tr style={{ backgroundColor: colors.background.subtle }}>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`,
-                      fontWeight: typography.fontWeight.bold,
-                      backgroundColor: colors.primitive.gray[100]
-                    }}>初期表示速度</td>
+                      fontWeight: typography.fontWeight.bold
+                    }}>SSG<br/><span style={{ fontSize: "0.85em", fontWeight: typography.fontWeight.normal }}>(Next.js)</span></td>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>速い</td>
+                    }}>Build時（Server）</td>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>遅い</td>
+                    }}>Client側（SPA的）</td>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>速い</td>
+                    }}>中〜大</td>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>最速（キャッシュ時）</td>
+                    }}>◎</td>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`,
-                      backgroundColor: colors.primitive.blue[50]
-                    }}>速い</td>
+                      fontSize: "0.9em"
+                    }}>ドキュメント</td>
                   </tr>
 
-                  {/* ハイドレーション */}
                   <tr>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`,
-                      fontWeight: typography.fontWeight.bold,
-                      backgroundColor: colors.primitive.gray[100]
-                    }}>ハイドレーション</td>
+                      fontWeight: typography.fontWeight.bold
+                    }}>SSR<br/><span style={{ fontSize: "0.85em", fontWeight: typography.fontWeight.normal }}>(Pages Router)</span></td>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>なし</td>
+                    }}>Server（リクエスト時）</td>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>初回レンダリング時</td>
+                    }}>HTML全体取得</td>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>全ページで必要</td>
+                    }}>大きい</td>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>全ページで必要</td>
+                    }}>◎</td>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`,
-                      backgroundColor: colors.primitive.blue[50]
-                    }}>CCのみ（部分的）</td>
+                      fontSize: "0.9em"
+                    }}>EC、ニュース</td>
                   </tr>
 
-                  {/* キャッシュ戦略 */}
                   <tr style={{ backgroundColor: colors.background.subtle }}>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`,
-                      fontWeight: typography.fontWeight.bold,
-                      backgroundColor: colors.primitive.gray[100]
-                    }}>キャッシュ戦略</td>
+                      fontWeight: typography.fontWeight.bold
+                    }}>ISR<br/><span style={{ fontSize: "0.85em", fontWeight: typography.fontWeight.normal }}>(Next.js)</span></td>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>HTTPキャッシュのみ</td>
+                    }}>Server（キャッシュ+再生成）</td>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>アプリ内状態管理</td>
+                    }}>Client側（SPA的）</td>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>HTTPキャッシュ</td>
+                    }}>中〜大</td>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>サーバーキャッシュ（revalidate）</td>
+                    }}>◎</td>
                     <td style={{
                       padding: spacing.scale[2],
                       borderBottom: `1px solid ${colors.border.subtle}`,
-                      backgroundColor: colors.primitive.blue[50]
-                    }}>Router Cache + Data Cache</td>
+                      fontSize: "0.9em"
+                    }}>ブログ</td>
                   </tr>
 
-                  {/* 開発体験 */}
-                  <tr>
+                  <tr style={{ backgroundColor: colors.primitive.blue[50] }}>
                     <td style={{
                       padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`,
-                      fontWeight: typography.fontWeight.bold,
-                      backgroundColor: colors.primitive.gray[100]
-                    }}>開発体験</td>
+                      fontWeight: typography.fontWeight.bold
+                    }}>RSC<br/><span style={{ fontSize: "0.85em", fontWeight: typography.fontWeight.normal }}>(App Router)</span></td>
+                    <td style={{
+                      padding: spacing.scale[2]
+                    }}>Server（UI計算）</td>
+                    <td style={{
+                      padding: spacing.scale[2]
+                    }}>Flight Payload（軽量）</td>
+                    <td style={{
+                      padding: spacing.scale[2]
+                    }}>小〜中（SCは除外）</td>
+                    <td style={{
+                      padding: spacing.scale[2]
+                    }}>◎</td>
                     <td style={{
                       padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>シンプル</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>良好</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>良好</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`
-                    }}>良好</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      borderBottom: `1px solid ${colors.border.subtle}`,
-                      backgroundColor: colors.primitive.blue[50]
-                    }}>学習コスト高</td>
-                  </tr>
-
-                  {/* 適用例 */}
-                  <tr style={{ backgroundColor: colors.background.subtle }}>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      fontWeight: typography.fontWeight.bold,
-                      backgroundColor: colors.primitive.gray[100]
-                    }}>適用例</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      fontSize: "0.9em",
-                      lineHeight: 1.4
-                    }}>ブログ、コーポレートサイト</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      fontSize: "0.9em",
-                      lineHeight: 1.4
-                    }}>管理画面、ダッシュボード</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      fontSize: "0.9em",
-                      lineHeight: 1.4
-                    }}>EC、ニュースサイト</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      fontSize: "0.9em",
-                      lineHeight: 1.4
-                    }}>ドキュメント、ブログ</td>
-                    <td style={{
-                      padding: spacing.scale[2],
-                      fontSize: "0.9em",
-                      lineHeight: 1.4,
-                      backgroundColor: colors.primitive.blue[50]
+                      fontSize: "0.9em"
                     }}>あらゆるWebアプリ</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div style={{ marginTop: spacing.scale[6] }}>
+            <h3 style={{
+              fontSize: typography.heading.h6.fontSize,
+              fontWeight: typography.heading.h6.fontWeight,
+              color: colors.primitive.pink[700],
+              marginBottom: spacing.scale[2]
+            }}>
+              🔧 主要技術の役割
+            </h3>
+            <p style={{
+              fontSize: typography.fontSize.sm,
+              color: colors.text.secondary,
+              marginBottom: spacing.scale[3],
+              lineHeight: typography.lineHeight.relaxed
+            }}>
+              これらの技術は戦略と組み合わせて使われます。
+            </p>
+            <div style={{ overflowX: "auto" }}>
+              <table style={{
+                width: "100%",
+                borderCollapse: "collapse",
+                fontSize: typography.fontSize.sm,
+                backgroundColor: colors.background.default,
+                border: `1px solid ${colors.border.subtle}`
+              }}>
+                <thead>
+                  <tr style={{ backgroundColor: colors.primitive.gray[800], color: colors.text.inverse }}>
+                    <th style={{
+                      padding: spacing.scale[3],
+                      textAlign: "left",
+                      borderBottom: `2px solid ${colors.border.default}`,
+                      fontWeight: typography.fontWeight.bold,
+                      minWidth: "140px"
+                    }}>技術</th>
+                    <th style={{
+                      padding: spacing.scale[3],
+                      textAlign: "left",
+                      borderBottom: `2px solid ${colors.border.default}`,
+                      fontWeight: typography.fontWeight.bold,
+                      minWidth: "220px"
+                    }}>何のため？</th>
+                    <th style={{
+                      padding: spacing.scale[3],
+                      textAlign: "left",
+                      borderBottom: `2px solid ${colors.border.default}`,
+                      fontWeight: typography.fontWeight.bold,
+                      minWidth: "140px"
+                    }}>どこで動く？</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style={{ backgroundColor: colors.background.subtle }}>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`,
+                      fontWeight: typography.fontWeight.bold
+                    }}>Hydration</td>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`
+                    }}>SSRで描画したHTMLにReactを「再結合」する</td>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`
+                    }}>Client</td>
+                  </tr>
+                  <tr>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`,
+                      fontWeight: typography.fontWeight.bold
+                    }}>Streaming SSR</td>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`
+                    }}>HTMLを分割して逐次返す（段階的表示）</td>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`
+                    }}>Server → Client</td>
+                  </tr>
+                  <tr style={{ backgroundColor: colors.primitive.blue[50] }}>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      fontWeight: typography.fontWeight.bold
+                    }}>Flight Payload</td>
+                    <td style={{
+                      padding: spacing.scale[3]
+                    }}>RSCの結果を最小データ形式で送る</td>
+                    <td style={{
+                      padding: spacing.scale[3]
+                    }}>Server → Client</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div style={{ marginTop: spacing.scale[6] }}>
+            <h3 style={{
+              fontSize: typography.heading.h6.fontSize,
+              fontWeight: typography.heading.h6.fontWeight,
+              color: colors.primitive.pink[700],
+              marginBottom: spacing.scale[2]
+            }}>
+              💾 キャッシュ戦略の詳細
+            </h3>
+            <p style={{
+              fontSize: typography.fontSize.sm,
+              color: colors.text.secondary,
+              marginBottom: spacing.scale[3],
+              lineHeight: typography.lineHeight.relaxed
+            }}>
+              各戦略でどのようにデータがキャッシュされるかを理解することで、パフォーマンス最適化の指針が見えてきます。
+            </p>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: spacing.scale[4] }}>
+              <div style={{
+                padding: spacing.scale[4],
+                backgroundColor: colors.background.subtle,
+                borderRadius: radii.borderRadius.md,
+                border: `1px solid ${colors.border.subtle}`
+              }}>
+                <h4 style={{
+                  fontSize: typography.fontSize.base,
+                  fontWeight: typography.fontWeight.bold,
+                  marginBottom: spacing.scale[2]
+                }}>MPA / SSG / SSR: HTTPキャッシュ</h4>
+                <p style={{ fontSize: typography.fontSize.sm, lineHeight: typography.lineHeight.relaxed, marginBottom: spacing.scale[2] }}>
+                  ブラウザやCDNがHTTPヘッダー（<code>Cache-Control</code>、<code>ETag</code>など）に基づいてキャッシュ。
+                </p>
+                <ul style={{
+                  marginLeft: spacing.scale[6],
+                  fontSize: typography.fontSize.sm,
+                  lineHeight: typography.lineHeight.relaxed
+                }}>
+                  <li><strong>SSG:</strong> ビルド時に生成された静的ファイルをCDNで長期キャッシュ（例: 1年間）</li>
+                  <li><strong>SSR:</strong> 動的コンテンツなのでキャッシュ期間は短い、または無効化</li>
+                  <li><strong>制御方法:</strong> <code>Cache-Control: max-age=3600</code> など</li>
+                </ul>
+              </div>
+
+              <div style={{
+                padding: spacing.scale[4],
+                backgroundColor: colors.background.subtle,
+                borderRadius: radii.borderRadius.md,
+                border: `1px solid ${colors.border.subtle}`
+              }}>
+                <h4 style={{
+                  fontSize: typography.fontSize.base,
+                  fontWeight: typography.fontWeight.bold,
+                  marginBottom: spacing.scale[2]
+                }}>SPA/CSR: アプリ内状態管理</h4>
+                <p style={{ fontSize: typography.fontSize.sm, lineHeight: typography.lineHeight.relaxed, marginBottom: spacing.scale[2] }}>
+                  JavaScriptのメモリ上でデータを保持。ページリロードで消える。
+                </p>
+                <ul style={{
+                  marginLeft: spacing.scale[6],
+                  fontSize: typography.fontSize.sm,
+                  lineHeight: typography.lineHeight.relaxed
+                }}>
+                  <li>React Query、SWR、Zustandなどのライブラリで管理</li>
+                  <li>ローカルストレージ、SessionStorageも併用可能</li>
+                  <li>サーバーへのリクエスト頻度を減らすための工夫が必要</li>
+                </ul>
+              </div>
+
+              <div style={{
+                padding: spacing.scale[4],
+                backgroundColor: colors.background.subtle,
+                borderRadius: radii.borderRadius.md,
+                border: `1px solid ${colors.border.subtle}`
+              }}>
+                <h4 style={{
+                  fontSize: typography.fontSize.base,
+                  fontWeight: typography.fontWeight.bold,
+                  marginBottom: spacing.scale[2]
+                }}>ISR: revalidate（サーバー側の定期再生成）</h4>
+                <p style={{ fontSize: typography.fontSize.sm, lineHeight: typography.lineHeight.relaxed, marginBottom: spacing.scale[2] }}>
+                  静的生成したページを一定時間ごとにバックグラウンドで再生成。
+                </p>
+                <pre style={{
+                  backgroundColor: colors.primitive.gray[900],
+                  color: colors.primitive.gray[100],
+                  padding: spacing.scale[3],
+                  borderRadius: radii.borderRadius.base,
+                  fontSize: typography.fontSize.sm,
+                  fontFamily: typography.fontFamily.mono,
+                  marginBottom: spacing.scale[2]
+                }}>
+{`// Pages Router
+export async function getStaticProps() {
+  return {
+    props: { data: ... },
+    revalidate: 60 // 60秒ごとに再生成
+  }
+}`}
+                </pre>
+                <ul style={{
+                  marginLeft: spacing.scale[6],
+                  fontSize: typography.fontSize.sm,
+                  lineHeight: typography.lineHeight.relaxed
+                }}>
+                  <li>初回アクセスは古いキャッシュを返し、バックグラウンドで更新</li>
+                  <li>SSGの速度とSSRの柔軟性を両立</li>
+                </ul>
+              </div>
+
+              <div style={{
+                padding: spacing.scale[4],
+                backgroundColor: colors.primitive.blue[50],
+                borderRadius: radii.borderRadius.md,
+                border: `1px solid ${colors.primitive.blue[300]}`
+              }}>
+                <h4 style={{
+                  fontSize: typography.fontSize.base,
+                  fontWeight: typography.fontWeight.bold,
+                  marginBottom: spacing.scale[2],
+                  color: colors.primitive.blue[900]
+                }}>RSC: Router Cache + Data Cache（Next.js独自）</h4>
+                <p style={{ fontSize: typography.fontSize.sm, lineHeight: typography.lineHeight.relaxed, marginBottom: spacing.scale[3] }}>
+                  Next.js App Routerでは2層のキャッシュ構造を持ちます。
+                </p>
+
+                <div style={{ marginBottom: spacing.scale[3] }}>
+                  <h5 style={{
+                    fontSize: typography.fontSize.sm,
+                    fontWeight: typography.fontWeight.bold,
+                    marginBottom: spacing.scale[2],
+                    color: colors.primitive.blue[800]
+                  }}>1️⃣ Router Cache（クライアント側）</h5>
+                  <ul style={{
+                    marginLeft: spacing.scale[6],
+                    fontSize: typography.fontSize.sm,
+                    lineHeight: typography.lineHeight.relaxed
+                  }}>
+                    <li><strong>場所:</strong> ブラウザのメモリ</li>
+                    <li><strong>対象:</strong> Flight Payloadの結果</li>
+                    <li><strong>期間:</strong> セッション中（開発環境ではキャッシュなし）</li>
+                    <li><strong>効果:</strong> ページ間の高速な遷移（戻る/進む）</li>
+                    <li><strong>クリア:</strong> <code>router.refresh()</code> で強制更新</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 style={{
+                    fontSize: typography.fontSize.sm,
+                    fontWeight: typography.fontWeight.bold,
+                    marginBottom: spacing.scale[2],
+                    color: colors.primitive.blue[800]
+                  }}>2️⃣ Data Cache（サーバー側）</h5>
+                  <ul style={{
+                    marginLeft: spacing.scale[6],
+                    fontSize: typography.fontSize.sm,
+                    lineHeight: typography.lineHeight.relaxed
+                  }}>
+                    <li><strong>場所:</strong> Next.jsサーバー</li>
+                    <li><strong>対象:</strong> <code>fetch()</code> の結果</li>
+                    <li><strong>期間:</strong> デプロイ間で永続（設定で変更可能）</li>
+                    <li><strong>制御:</strong></li>
+                  </ul>
+                  <pre style={{
+                    backgroundColor: colors.primitive.gray[900],
+                    color: colors.primitive.gray[100],
+                    padding: spacing.scale[3],
+                    borderRadius: radii.borderRadius.base,
+                    fontSize: typography.fontSize.sm,
+                    fontFamily: typography.fontFamily.mono,
+                    marginTop: spacing.scale[2]
+                  }}>
+{`// キャッシュしない
+fetch(url, { cache: 'no-store' })
+
+// 60秒ごとに再検証
+fetch(url, { next: { revalidate: 60 } })
+
+// ページ全体の設定
+export const revalidate = 60`}
+                  </pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ marginTop: spacing.scale[6] }}>
+            <h3 style={{
+              fontSize: typography.heading.h6.fontSize,
+              fontWeight: typography.heading.h6.fontWeight,
+              color: colors.primitive.pink[700],
+              marginBottom: spacing.scale[2]
+            }}>
+              🛠️ フレームワーク別の比較
+            </h3>
+            <p style={{
+              fontSize: typography.fontSize.sm,
+              color: colors.text.secondary,
+              marginBottom: spacing.scale[3],
+              lineHeight: typography.lineHeight.relaxed
+            }}>
+              同じSSGでもフレームワークによって遷移の挙動が異なります。
+            </p>
+            <div style={{ overflowX: "auto" }}>
+              <table style={{
+                width: "100%",
+                borderCollapse: "collapse",
+                fontSize: typography.fontSize.sm,
+                backgroundColor: colors.background.default,
+                border: `1px solid ${colors.border.subtle}`
+              }}>
+                <thead>
+                  <tr style={{ backgroundColor: colors.primitive.gray[800], color: colors.text.inverse }}>
+                    <th style={{
+                      padding: spacing.scale[3],
+                      textAlign: "left",
+                      borderBottom: `2px solid ${colors.border.default}`,
+                      fontWeight: typography.fontWeight.bold,
+                      minWidth: "140px"
+                    }}>フレームワーク</th>
+                    <th style={{
+                      padding: spacing.scale[3],
+                      textAlign: "left",
+                      borderBottom: `2px solid ${colors.border.default}`,
+                      fontWeight: typography.fontWeight.bold,
+                      minWidth: "110px"
+                    }}>主な用途</th>
+                    <th style={{
+                      padding: spacing.scale[3],
+                      textAlign: "left",
+                      borderBottom: `2px solid ${colors.border.default}`,
+                      fontWeight: typography.fontWeight.bold,
+                      minWidth: "100px"
+                    }}>レンダリング</th>
+                    <th style={{
+                      padding: spacing.scale[3],
+                      textAlign: "left",
+                      borderBottom: `2px solid ${colors.border.default}`,
+                      fontWeight: typography.fontWeight.bold,
+                      minWidth: "140px"
+                    }}>デフォルト遷移</th>
+                    <th style={{
+                      padding: spacing.scale[3],
+                      textAlign: "left",
+                      borderBottom: `2px solid ${colors.border.default}`,
+                      fontWeight: typography.fontWeight.bold,
+                      minWidth: "90px"
+                    }}>JSバンドル</th>
+                    <th style={{
+                      padding: spacing.scale[3],
+                      textAlign: "left",
+                      borderBottom: `2px solid ${colors.border.default}`,
+                      fontWeight: typography.fontWeight.bold,
+                      minWidth: "160px"
+                    }}>特徴</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style={{ backgroundColor: colors.background.subtle }}>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`,
+                      fontWeight: typography.fontWeight.bold
+                    }}>Hugo / Jekyll</td>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`
+                    }}>静的サイト</td>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`
+                    }}>SSG</td>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`
+                    }}>MPA（フルリロード）</td>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`
+                    }}>なし〜小</td>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`,
+                      fontSize: typography.fontSize.xs
+                    }}>シンプル、高速、JSフレームワーク不要</td>
+                  </tr>
+
+                  <tr>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`,
+                      fontWeight: typography.fontWeight.bold
+                    }}>Astro</td>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`
+                    }}>コンテンツサイト</td>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`
+                    }}>SSG / SSR</td>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`
+                    }}>MPA（オプションでSPA的）</td>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`
+                    }}>最小限</td>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`,
+                      fontSize: typography.fontSize.xs
+                    }}>View Transitions APIでSPA的遷移も可能</td>
+                  </tr>
+
+                  <tr style={{ backgroundColor: colors.background.subtle }}>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`,
+                      fontWeight: typography.fontWeight.bold
+                    }}>Gatsby</td>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`
+                    }}>ブログ、サイト</td>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`
+                    }}>SSG</td>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`
+                    }}>SPA（Client側）</td>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`
+                    }}>大きい</td>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`,
+                      fontSize: typography.fontSize.xs
+                    }}>Reactベース、GraphQLでデータ取得</td>
+                  </tr>
+
+                  <tr>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`,
+                      fontWeight: typography.fontWeight.bold
+                    }}>Next.js<br/><span style={{ fontSize: "0.85em", fontWeight: typography.fontWeight.normal }}>(Pages Router)</span></td>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`
+                    }}>Webアプリ</td>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`
+                    }}>SSG / SSR / ISR</td>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`
+                    }}>SPA（Client側）</td>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`
+                    }}>大きい</td>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      borderBottom: `1px solid ${colors.border.subtle}`,
+                      fontSize: typography.fontSize.xs
+                    }}>ハイブリッド、ページごとに戦略選択可能</td>
+                  </tr>
+
+                  <tr style={{ backgroundColor: colors.primitive.blue[50] }}>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      fontWeight: typography.fontWeight.bold
+                    }}>Next.js<br/><span style={{ fontSize: "0.85em", fontWeight: typography.fontWeight.normal }}>(App Router)</span></td>
+                    <td style={{
+                      padding: spacing.scale[3]
+                    }}>Webアプリ</td>
+                    <td style={{
+                      padding: spacing.scale[3]
+                    }}>RSC</td>
+                    <td style={{
+                      padding: spacing.scale[3]
+                    }}>Flight Payload（軽量）</td>
+                    <td style={{
+                      padding: spacing.scale[3]
+                    }}>小〜中</td>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      fontSize: typography.fontSize.xs
+                    }}>Server Components、最小JSバンドル</td>
+                  </tr>
+
+                  <tr style={{ backgroundColor: colors.background.subtle }}>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      fontWeight: typography.fontWeight.bold
+                    }}>Create React App<br/><span style={{ fontSize: "0.85em", fontWeight: typography.fontWeight.normal }}>(Vite等)</span></td>
+                    <td style={{
+                      padding: spacing.scale[3]
+                    }}>SPAアプリ</td>
+                    <td style={{
+                      padding: spacing.scale[3]
+                    }}>CSR</td>
+                    <td style={{
+                      padding: spacing.scale[3]
+                    }}>SPA（Client側）</td>
+                    <td style={{
+                      padding: spacing.scale[3]
+                    }}>大きい</td>
+                    <td style={{
+                      padding: spacing.scale[3],
+                      fontSize: typography.fontSize.xs
+                    }}>純粋なSPA、SEO不向き</td>
                   </tr>
                 </tbody>
               </table>
@@ -1093,28 +1406,461 @@ fetch(window.location.href, {
             <div style={{
               marginTop: spacing.scale[4],
               padding: spacing.scale[4],
-              backgroundColor: colors.primitive.blue[50],
+              backgroundColor: colors.primitive.green[50],
               borderRadius: radii.borderRadius.md,
-              border: `1px solid ${colors.primitive.blue[200]}`
+              border: `1px solid ${colors.primitive.green[200]}`
             }}>
               <h4 style={{
                 fontSize: typography.fontSize.sm,
                 fontWeight: typography.fontWeight.bold,
                 marginBottom: spacing.scale[2],
-                color: colors.primitive.blue[900]
-              }}>📖 用語解説</h4>
+                color: colors.primitive.green[900]
+              }}>💡 重要な違い</h4>
               <ul style={{
                 marginLeft: spacing.scale[6],
-                fontSize: typography.fontSize.xs,
+                fontSize: typography.fontSize.sm,
                 lineHeight: typography.lineHeight.relaxed
               }}>
-                <li><strong>MPA (Multi-Page Application):</strong> 従来型のWebサイト。ページ遷移のたびにサーバーから完全なHTMLを取得</li>
-                <li><strong>SPA/CSR (Single Page Application / Client-Side Rendering):</strong> クライアント側でJavaScriptがページを動的に生成</li>
-                <li><strong>SSR (Server-Side Rendering):</strong> Next.jsのPages Routerなど。リクエストごとにサーバーでHTMLを生成</li>
-                <li><strong>ISR (Incremental Static Regeneration):</strong> 静的生成とSSRのハイブリッド。一定時間ごとに再生成</li>
-                <li><strong>RSC (React Server Components):</strong> Next.js App Router。サーバーとクライアントのコンポーネントを明確に分離</li>
+                <li><strong>MPA vs ハイブリッド:</strong> 同じSSGでも、Hugo/Jekyllはフルリロード、Next.jsはSPA的遷移</li>
+                <li><strong>Astroの柔軟性:</strong> デフォルトMPAだが、View Transitions APIでSPA的にも可能</li>
+                <li><strong>Next.js App Router:</strong> Flight Payloadで遷移時のデータ転送を最小化</li>
+                <li><strong>JSバンドルサイズ:</strong> Astro/Hugo（最小） &lt; Next.js App Router（小〜中） &lt; Gatsby/Pages Router（大）</li>
               </ul>
             </div>
+          </div>
+
+          <div style={{ marginTop: spacing.scale[6] }}>
+            <h3 style={{
+              fontSize: typography.heading.h6.fontSize,
+              fontWeight: typography.heading.h6.fontWeight,
+              color: colors.primitive.pink[700],
+              marginBottom: spacing.scale[2]
+            }}>
+              📈 レンダリングフロー（シーケンス図）
+            </h3>
+            <p style={{
+              fontSize: typography.fontSize.sm,
+              color: colors.text.secondary,
+              marginBottom: spacing.scale[4],
+              lineHeight: typography.lineHeight.relaxed
+            }}>
+              各戦略のリクエストフローを時系列で理解しましょう。
+            </p>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: spacing.scale[6] }}>
+              {/* SSG */}
+              <div style={{
+                padding: spacing.scale[4],
+                backgroundColor: colors.background.subtle,
+                borderRadius: radii.borderRadius.lg,
+                border: `1px solid ${colors.border.subtle}`
+              }}>
+                <h4 style={{
+                  fontSize: typography.fontSize.base,
+                  fontWeight: typography.fontWeight.bold,
+                  marginBottom: spacing.scale[3],
+                  color: colors.primitive.green[800]
+                }}>1️⃣ SSG（Static Site Generation）</h4>
+                <ClickableDiagram
+                  title="SSG（Static Site Generation）のシーケンス図"
+                  chart={`
+sequenceDiagram
+    autonumber
+    rect rgb(240, 240, 245)
+        Note over 開発者,CDN: ビルド時
+        開発者->>Next.js Build: npm run build
+        Next.js Build->>DB/API: データ取得
+        DB/API-->>Next.js Build: データ返却
+        Next.js Build->>CDN: 静的HTML + JSON保存
+        Note right of CDN: Vercel: Edge Network<br/>AWS: S3<br/>自社: ローカルディスク
+        Next.js Build-->>開発者: ビルド完了
+    end
+
+    rect rgb(230, 250, 240)
+        Note over ユーザー,ブラウザ: 初回アクセス
+        ユーザー->>CDN: ページリクエスト
+        CDN->>ストレージ: HTML取得
+        ストレージ-->>CDN: HTML返却
+        CDN-->>ユーザー: HTML配信
+        ブラウザ->>ブラウザ: Hydration（JS実行）
+        Note right of ブラウザ: これ以降、ReactアプリとしてSPA状態
+    end
+
+    rect rgb(255, 250, 230)
+        Note over ユーザー,ブラウザ: ページ遷移時（Next.js Link）
+        ユーザー->>ブラウザ: リンククリック
+        ブラウザ->>CDN: JSONリクエスト
+        Note right of CDN: /_next/data/build-id/page.json
+        CDN-->>ブラウザ: JSON返却（キャッシュ済み）
+        ブラウザ->>ブラウザ: Reactで差分更新
+        Note right of ブラウザ: Hydration不要、すでにReact動作中
+    end
+
+    rect rgb(250, 240, 250)
+        Note over ユーザー,ブラウザ: 再訪問（リロード）
+        ユーザー->>CDN: ページリクエスト
+        CDN-->>ユーザー: HTML配信
+        alt JSキャッシュヒット
+            ブラウザキャッシュ-->>ブラウザ: JSファイル即座に使用
+            ブラウザ->>ブラウザ: Hydration実行（超高速）
+        else JSキャッシュミス
+            ブラウザ->>CDN: JSファイルリクエスト
+            CDN-->>ブラウザ: JSファイル配信
+            ブラウザ->>ブラウザ: Hydration実行
+        end
+    end
+                `} />
+                <p style={{
+                  marginTop: spacing.scale[2],
+                  fontSize: typography.fontSize.sm,
+                  color: colors.text.secondary
+                }}>
+                  💡 <strong>ポイント:</strong> ビルド時に全ページ生成。CDNエッジキャッシュで最速配信。データ更新には再ビルド必要。
+                </p>
+              </div>
+
+              {/* SSR */}
+              <div style={{
+                padding: spacing.scale[4],
+                backgroundColor: colors.background.subtle,
+                borderRadius: radii.borderRadius.lg,
+                border: `1px solid ${colors.border.subtle}`
+              }}>
+                <h4 style={{
+                  fontSize: typography.fontSize.base,
+                  fontWeight: typography.fontWeight.bold,
+                  marginBottom: spacing.scale[3],
+                  color: colors.primitive.blue[800]
+                }}>2️⃣ SSR（Server-Side Rendering）</h4>
+                <ClickableDiagram
+                  title="SSR（Server-Side Rendering）のシーケンス図"
+                  chart={`
+sequenceDiagram
+    autonumber
+    rect rgb(230, 245, 255)
+        Note over ユーザー,ブラウザ: 初回アクセス
+        ユーザー->>Server: ページリクエスト
+        Server->>DB/API: データ取得
+        DB/API-->>Server: データ返却
+        Server->>Server: HTMLレンダリング
+        Server-->>ユーザー: HTML配信
+        Note right of ユーザー: HTML内にscriptタグ
+        alt JSキャッシュヒット
+            ブラウザキャッシュ-->>ブラウザ: JSファイル使用
+        else JSキャッシュミス
+            ブラウザ->>CDN: JSファイルリクエスト
+            CDN-->>ブラウザ: JSファイル配信
+        end
+        ブラウザ->>ブラウザ: Hydration実行
+        Note right of ブラウザ: これ以降、ReactアプリとしてSPA状態
+    end
+
+    rect rgb(255, 250, 230)
+        Note over ユーザー,ブラウザ: ページ遷移時（Next.js Link）
+        ユーザー->>ブラウザ: リンククリック
+        ブラウザ->>Server: JSONリクエスト
+        Note right of Server: /_next/data/build-id/page.json
+        Server->>DB/API: データ取得
+        DB/API-->>Server: データ返却
+        Server-->>ブラウザ: JSON配信
+        ブラウザ->>ブラウザ: Reactで差分更新
+        Note right of ブラウザ: Hydration不要、すでにReact動作中
+    end
+
+    rect rgb(250, 240, 250)
+        Note over ユーザー,ブラウザ: 再訪問（リロード）
+        ユーザー->>Server: ページリクエスト
+        Server->>DB/API: データ取得（最新）
+        DB/API-->>Server: データ返却
+        Server-->>ユーザー: 新しいHTML配信
+        ブラウザキャッシュ-->>ブラウザ: JSファイル使用（ヒット）
+        ブラウザ->>ブラウザ: Hydration実行
+    end
+                `} />
+                <p style={{
+                  marginTop: spacing.scale[2],
+                  fontSize: typography.fontSize.sm,
+                  color: colors.text.secondary
+                }}>
+                  💡 <strong>ポイント:</strong> リクエストごとにサーバーでHTML生成。常に最新データだがSSGより遅い。
+                </p>
+              </div>
+
+              {/* ISR */}
+              <div style={{
+                padding: spacing.scale[4],
+                backgroundColor: colors.background.subtle,
+                borderRadius: radii.borderRadius.lg,
+                border: `1px solid ${colors.border.subtle}`
+              }}>
+                <h4 style={{
+                  fontSize: typography.fontSize.base,
+                  fontWeight: typography.fontWeight.bold,
+                  marginBottom: spacing.scale[3],
+                  color: colors.primitive.orange[800]
+                }}>3️⃣ ISR（Incremental Static Regeneration）</h4>
+                <ClickableDiagram
+                  title="ISR（Incremental Static Regeneration）のシーケンス図"
+                  chart={`
+sequenceDiagram
+    autonumber
+    rect rgb(240, 240, 245)
+        Note over 開発者,CDN: ビルド時
+        開発者->>Next.js Build: npm run build
+        Next.js Build->>DB/API: データ取得
+        DB/API-->>Next.js Build: データ返却
+        Next.js Build->>CDN: 静的HTML + JSON保存
+        Note right of CDN: revalidate: 60 設定<br/>（60秒ごとに再検証）
+    end
+
+    rect rgb(230, 250, 240)
+        Note over ユーザー,Server: 初回アクセス（キャッシュ有効）
+        ユーザー->>Server: ページリクエスト
+        Server->>キャッシュ: キャッシュ確認（有効）
+        Server-->>ユーザー: キャッシュHTML配信（高速）
+        ブラウザ->>ブラウザ: Hydration実行
+    end
+
+    rect rgb(255, 245, 230)
+        Note over ユーザー,Server: リクエスト時（キャッシュ期限切れ）
+        ユーザー->>Server: ページリクエスト
+        Server->>キャッシュ: キャッシュ確認（期限切れ）
+        Server-->>ユーザー: 古いHTML配信（まず返す）
+        Note right of Server: Stale-While-Revalidate戦略
+        par バックグラウンド再生成
+            Server->>DB/API: データ取得
+            DB/API-->>Server: 新データ返却
+            Server->>Server: 新HTML + JSON生成
+            Server->>キャッシュ: 新HTML保存
+        end
+    end
+
+    rect rgb(255, 250, 230)
+        Note over ユーザー,ブラウザ: ページ遷移時（Next.js Link）
+        ユーザー->>ブラウザ: リンククリック
+        ブラウザ->>Server: JSONリクエスト
+        Server->>キャッシュ: JSON確認
+        Server-->>ブラウザ: JSON返却
+        ブラウザ->>ブラウザ: Reactで差分更新
+    end
+
+    rect rgb(230, 255, 230)
+        Note over ユーザー,Server: 次のリクエスト
+        ユーザー->>Server: ページリクエスト
+        Server-->>ユーザー: 更新されたHTML配信
+    end
+                `} />
+                <p style={{
+                  marginTop: spacing.scale[2],
+                  fontSize: typography.fontSize.sm,
+                  color: colors.text.secondary
+                }}>
+                  💡 <strong>ポイント:</strong> Stale-While-Revalidate戦略。古いキャッシュをまず返し、バックグラウンドで更新。
+                </p>
+                <ul style={{
+                  marginTop: spacing.scale[2],
+                  marginLeft: spacing.scale[6],
+                  fontSize: typography.fontSize.sm,
+                  lineHeight: typography.lineHeight.relaxed,
+                  color: colors.text.secondary
+                }}>
+                  <li>アクセスがないページは再生成されない（効率的）</li>
+                  <li>古いキャッシュをまず返してバックグラウンドで更新（高速）</li>
+                  <li>リクエストタイミングで最新化（オンデマンドなキャッシュ更新）</li>
+                </ul>
+              </div>
+
+              {/* RSC */}
+              <div style={{
+                padding: spacing.scale[4],
+                backgroundColor: colors.primitive.blue[50],
+                borderRadius: radii.borderRadius.lg,
+                border: `1px solid ${colors.primitive.blue[300]}`
+              }}>
+                <h4 style={{
+                  fontSize: typography.fontSize.base,
+                  fontWeight: typography.fontWeight.bold,
+                  marginBottom: spacing.scale[3],
+                  color: colors.primitive.blue[900]
+                }}>4️⃣ RSC（React Server Components）+ Flight Payload</h4>
+                <ClickableDiagram
+                  title="RSC（React Server Components）+ Flight Payload のシーケンス図"
+                  chart={`
+sequenceDiagram
+    autonumber
+    rect rgb(230, 245, 255)
+        Note over ユーザー,ブラウザ: 初回アクセス
+        ユーザー->>Server: ページリクエスト
+        Server->>Data Cache: fetch()結果確認
+        alt Data Cache ヒット
+            Data Cache-->>Server: キャッシュデータ使用
+        else Data Cache ミス
+            Server->>DB/API: データ取得
+            DB/API-->>Server: データ返却
+            Server->>Data Cache: 結果をキャッシュ
+        end
+        Server->>Server: Server Components実行
+        Server->>Server: HTMLレンダリング
+        Server-->>ユーザー: 完全なHTML配信
+        alt JSキャッシュヒット
+            ブラウザキャッシュ-->>ブラウザ: JSファイル使用
+        else JSキャッシュミス
+            ブラウザ->>CDN: JSファイルリクエスト
+            CDN-->>ブラウザ: JSファイル配信
+        end
+        ブラウザ->>ブラウザ: Client ComponentsのみHydration
+        Note right of ブラウザ: Server Componentsは<br/>Hydration不要<br/>（サーバー実行済み）
+    end
+
+    rect rgb(245, 250, 255)
+        Note over ユーザー,ブラウザ: ページ遷移時（Next.js Link）
+        ユーザー->>ブラウザ: リンククリック
+        ブラウザ->>Router Cache: Flight Payload確認
+        alt Router Cache ヒット（本番のみ）
+            Router Cache-->>ブラウザ: キャッシュPayload使用
+            ブラウザ->>ブラウザ: Reactツリーに適用（即座）
+        else Router Cache ミス
+            ブラウザ->>Server: ?_rsc=xxx（Flight Payloadリクエスト）
+            Note right of Server: ヘッダー: RSC: 1
+            Server->>Data Cache: fetch()結果確認
+            Server->>DB/API: データ取得（必要時）
+            Server->>Server: Server Components実行
+            Server->>Server: Flight Payload生成
+            Server-->>ブラウザ: Flight Payload配信
+            Note right of Server: Content-Type:<br/>text/x-component
+            ブラウザ->>Router Cache: Payload保存
+            ブラウザ->>ブラウザ: Reactツリーに適用
+        end
+        Note right of ブラウザ: Hydration不要、<br/>すでにReact動作中
+    end
+
+    rect rgb(250, 240, 250)
+        Note over ユーザー,ブラウザ: 再訪問（リロード）
+        ユーザー->>Server: ページリクエスト
+        Server->>Data Cache: fetch()確認（ヒット）
+        Server->>Server: Server Components実行
+        Server-->>ユーザー: HTML配信
+        ブラウザキャッシュ-->>ブラウザ: JSファイル使用（ヒット）
+        ブラウザ->>ブラウザ: Client Components Hydration
+    end
+                `} />
+                <p style={{
+                  marginTop: spacing.scale[2],
+                  fontSize: typography.fontSize.sm,
+                  color: colors.text.secondary
+                }}>
+                  💡 <strong>ポイント:</strong> 初回はHTML全体、遷移時はFlight Payload（軽量）のみ。2層キャッシュで最適化。
+                </p>
+              </div>
+
+              {/* SPA/CSR */}
+              <div style={{
+                padding: spacing.scale[4],
+                backgroundColor: colors.background.subtle,
+                borderRadius: radii.borderRadius.lg,
+                border: `1px solid ${colors.border.subtle}`
+              }}>
+                <h4 style={{
+                  fontSize: typography.fontSize.base,
+                  fontWeight: typography.fontWeight.bold,
+                  marginBottom: spacing.scale[3],
+                  color: colors.primitive.red[800]
+                }}>5️⃣ SPA/CSR（Client-Side Rendering）</h4>
+                <ClickableDiagram
+                  title="SPA/CSR（Client-Side Rendering）のシーケンス図"
+                  chart={`
+sequenceDiagram
+    autonumber
+    rect rgb(255, 240, 240)
+        Note over ユーザー,ブラウザ: 初回アクセス
+        ユーザー->>CDN: index.htmlリクエスト
+        CDN-->>ユーザー: 空のHTML配信
+        Note right of CDN: <div id="root"></div>のみ<br/>コンテンツなし
+        alt JSキャッシュヒット
+            ブラウザキャッシュ-->>ブラウザ: JSバンドル使用
+        else JSキャッシュミス
+            ブラウザ->>CDN: JSバンドルリクエスト
+            Note right of CDN: Reactライブラリ +<br/>アプリコード（大容量）
+            CDN-->>ブラウザ: JSバンドル配信
+        end
+        ブラウザ->>ブラウザ: JSダウンロード・実行
+        ブラウザ->>ブラウザ: React初期化
+        ブラウザ->>API: データ取得リクエスト
+        API-->>ブラウザ: JSON返却
+        ブラウザ->>ブラウザ: Reactレンダリング
+        ブラウザ-->>ユーザー: UI表示
+        Note right of ブラウザ: この時点で初めて<br/>コンテンツが表示される<br/>（初期表示遅い）
+    end
+
+    rect rgb(255, 250, 230)
+        Note over ユーザー,ブラウザ: ページ遷移時（React Router等）
+        ユーザー->>ブラウザ: リンククリック
+        ブラウザ->>ブラウザ: ルート変更（Client側のみ）
+        Note right of ブラウザ: サーバーリクエストなし<br/>URLのみ変更
+        ブラウザ->>メモリキャッシュ: データ確認
+        alt キャッシュヒット
+            メモリキャッシュ-->>ブラウザ: キャッシュデータ使用
+            ブラウザ->>ブラウザ: Reactで再レンダリング（即座）
+        else キャッシュミス
+            ブラウザ->>API: 新ページデータリクエスト
+            API-->>ブラウザ: JSON返却
+            ブラウザ->>メモリキャッシュ: データ保存
+            ブラウザ->>ブラウザ: Reactで再レンダリング
+        end
+        ブラウザ-->>ユーザー: UI更新（高速）
+    end
+
+    rect rgb(250, 240, 250)
+        Note over ユーザー,ブラウザ: 再訪問（リロード）
+        ユーザー->>CDN: index.htmlリクエスト
+        CDN-->>ユーザー: 空のHTML配信
+        ブラウザキャッシュ-->>ブラウザ: JSバンドル使用（ヒット）
+        ブラウザ->>ブラウザ: JS実行
+        ブラウザ->>API: データリクエスト
+        API-->>ブラウザ: JSON返却
+        ブラウザ->>ブラウザ: レンダリング
+        Note right of ブラウザ: メモリキャッシュは<br/>リロードで消失
+    end
+                `} />
+                <p style={{
+                  marginTop: spacing.scale[2],
+                  fontSize: typography.fontSize.sm,
+                  color: colors.text.secondary
+                }}>
+                  💡 <strong>ポイント:</strong> 初回は空HTML。全てJSで描画。遷移は高速だがSEO不利、初期表示遅い。
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div style={{
+            marginTop: spacing.scale[6],
+            padding: spacing.scale[4],
+            backgroundColor: colors.primitive.gray[50],
+            borderRadius: radii.borderRadius.md,
+            border: `1px solid ${colors.primitive.gray[200]}`
+          }}>
+            <h4 style={{
+              fontSize: typography.fontSize.sm,
+              fontWeight: typography.fontWeight.bold,
+              marginBottom: spacing.scale[2],
+              color: colors.primitive.gray[900]
+            }}>📖 用語解説</h4>
+            <ul style={{
+              marginLeft: spacing.scale[6],
+              fontSize: typography.fontSize.xs,
+              lineHeight: typography.lineHeight.relaxed
+            }}>
+              <li><strong>MPA (Multi-Page Application):</strong> 従来型のWebサイト。ページ遷移のたびにサーバーから完全なHTMLを取得</li>
+              <li><strong>SPA/CSR (Single Page Application / Client-Side Rendering):</strong> クライアント側でJavaScriptがページを動的に生成</li>
+              <li><strong>SSG (Static Site Generation):</strong> ビルド時に静的HTMLを生成。Next.jsではPages/App Router両方で利用可能</li>
+              <li><strong>SSR (Server-Side Rendering):</strong> リクエストごとにサーバーでHTMLを生成。Next.js Pages Routerの主要機能</li>
+              <li><strong>ISR (Incremental Static Regeneration):</strong> 静的生成とSSRのハイブリッド。一定時間ごとに再生成</li>
+              <li><strong>Streaming SSR:</strong> HTMLを段階的に送信する技術。Suspenseと組み合わせて使用</li>
+              <li><strong>RSC (React Server Components):</strong> Next.js App Router。サーバーとクライアントのコンポーネントを明確に分離</li>
+              <li><strong>Flight Payload:</strong> RSCの結果を軽量なデータ形式で送信する仕組み。画面遷移時にHTML全体ではなく必要なデータのみ送信</li>
+              <li><strong>Hydration:</strong> サーバーでレンダリングされた静的HTMLにクライアント側のJavaScriptを「結合」してインタラクティブにするプロセス</li>
+            </ul>
           </div>
 
           <div>

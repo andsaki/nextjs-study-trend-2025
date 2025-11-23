@@ -372,6 +372,81 @@ fetch(window.location.href, {
       <div style={{
         marginTop: spacing.scale[8],
         padding: spacing.scale[6],
+        backgroundColor: colors.feedback.info.bg,
+        borderRadius: radii.borderRadius.lg,
+        border: `1px solid ${colors.feedback.info.border}`
+      }}>
+        <h2 style={{
+          fontSize: typography.heading.h5.fontSize,
+          fontWeight: typography.heading.h5.fontWeight,
+          margin: 0,
+          marginBottom: spacing.scale[4],
+          color: colors.feedback.info.text
+        }}>
+          💧 ハイドレーションとエラーの正体
+        </h2>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: spacing.scale[5] }}>
+          <div>
+            <h3 style={{
+              fontSize: typography.heading.h6.fontSize,
+              fontWeight: typography.heading.h6.fontWeight,
+              color: colors.feedback.info.text,
+              marginBottom: spacing.scale[2]
+            }}>
+              ハイドレーションとは？
+            </h3>
+            <ol style={{ marginLeft: spacing.scale[6], lineHeight: typography.lineHeight.relaxed }}>
+              <li>サーバーで生成されたHTMLをブラウザが受け取る</li>
+              <li>対応するReactのJSバンドルを読み込む</li>
+              <li>既存DOMにイベントや状態を紐付けてReactを再開</li>
+            </ol>
+            <p style={{ marginLeft: spacing.scale[6], color: colors.text.secondary, marginTop: spacing.scale[2] }}>
+              目的は「空文字から描画し直す」のではなく、サーバーHTMLを活かしながらReactのライフサイクルを復元すること。
+            </p>
+          </div>
+
+          <div>
+            <h3 style={{
+              fontSize: typography.heading.h6.fontSize,
+              fontWeight: typography.heading.h6.fontWeight,
+              color: colors.feedback.info.text,
+              marginBottom: spacing.scale[2]
+            }}>
+              ハイドレーションエラーが起きるケース
+            </h3>
+            <ul style={{ marginLeft: spacing.scale[6], lineHeight: typography.lineHeight.relaxed }}>
+              <li><strong>日時や乱数:</strong> サーバーとクライアントで値がズレる</li>
+              <li><strong>ブラウザ依存の条件分岐:</strong> <code>window</code> やメディアクエリでUIが変わる</li>
+              <li><strong>非決定的な整形:</strong> ソート順やロケールが一致しない</li>
+            </ul>
+            <p style={{ marginLeft: spacing.scale[6], color: colors.text.secondary, marginTop: spacing.scale[2] }}>
+              DOM構造やテキスト内容が一致しないとReactは「紐付けられない」と判断し、警告後にDOMを作り直すためUXが低下する。
+            </p>
+          </div>
+
+          <div>
+            <h3 style={{
+              fontSize: typography.heading.h6.fontSize,
+              fontWeight: typography.heading.h6.fontWeight,
+              color: colors.feedback.info.text,
+              marginBottom: spacing.scale[2]
+            }}>
+              防ぐためのチェックリスト
+            </h3>
+            <ul style={{ marginLeft: spacing.scale[6], lineHeight: typography.lineHeight.relaxed }}>
+              <li>初期レンダリングで使う値は決定的にする（例: Date→ISO文字列を固定）</li>
+              <li>ブラウザ専用情報は <code>use client</code> なコンポーネントや <code>useEffect</code> に隔離</li>
+              <li>「差分を許容したい」場合は <code>suppressHydrationWarning</code> で明示</li>
+              <li>初期描画に不要なUIは条件付きレンダリングや遅延ロードで外す</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div style={{
+        marginTop: spacing.scale[8],
+        padding: spacing.scale[6],
         backgroundColor: colors.primitive.pink[50],
         borderRadius: radii.borderRadius.lg,
         border: `1px solid ${colors.primitive.pink[300]}`

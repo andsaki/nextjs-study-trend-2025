@@ -45,6 +45,11 @@ export const examplesData: Record<string, ExampleInfo> = {
     description: "useMemo、useCallback、React.memoの挙動を実際に確認できる検証ページ。",
     tags: ["useMemo", "useCallback", "React.memo", "Performance"],
   },
+  "build-vs-tsc": {
+    title: "Build vs TSC",
+    description: "npm run build と tsc の違いを理解するための解説ページ。",
+    tags: ["TypeScript", "Build", "Documentation"],
+  },
 };
 
 export type ExamplesData = typeof examplesData;

@@ -13,6 +13,7 @@
 | [005](./005-react-hook-form-for-forms.md) | React Hook Formによるフォーム管理 | 採用 | 2025-11-11 |
 | [006](./006-drizzle-vs-prisma-for-database-orm.md) | Drizzle vs Prisma比較とDrizzle ORM採用 | 採用 | 2025-11-14 |
 | [007](./007-use-transition-for-non-blocking-updates.md) | useTransitionによる非ブロッキング状態更新 | 採用 | 2025-11-15 |
+| [008](./008-react-query-data-fetching-patterns.md) | React Queryにおけるデータフェッチの仕組みとベストプラクティス | 採用 | 2025-11-23 |
 
 ## 技術スタックの全体像
 

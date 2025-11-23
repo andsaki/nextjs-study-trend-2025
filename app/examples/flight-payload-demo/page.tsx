@@ -2019,6 +2019,481 @@ sequenceDiagram
 
       <div style={{
         marginTop: spacing.scale[8],
+        padding: spacing.scale[6],
+        backgroundColor: colors.primitive.blue[50],
+        borderRadius: radii.borderRadius.lg,
+        border: `1px solid ${colors.primitive.blue[200]}`
+      }}>
+        <h2 style={{
+          fontSize: typography.heading.h5.fontSize,
+          fontWeight: typography.heading.h5.fontWeight,
+          margin: 0,
+          marginBottom: spacing.scale[4],
+          color: colors.primitive.blue[800]
+        }}>
+          🔄 データ取得の使い分け
+        </h2>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: spacing.scale[6] }}>
+          {/* Server Component vs React Query */}
+          <div>
+            <h3 style={{
+              fontSize: typography.heading.h6.fontSize,
+              fontWeight: typography.heading.h6.fontWeight,
+              color: colors.primitive.blue[700],
+              marginBottom: spacing.scale[3]
+            }}>
+              1. Server Component vs Client Component + React Query
+            </h3>
+
+            <div style={{
+              padding: spacing.scale[4],
+              backgroundColor: "rgba(0, 0, 0, 0.05)",
+              borderRadius: radii.borderRadius.md,
+              marginBottom: spacing.scale[4]
+            }}>
+              <table style={{
+                width: "100%",
+                borderCollapse: "collapse",
+                fontSize: typography.body.small.fontSize,
+              }}>
+                <thead>
+                  <tr style={{ borderBottom: `2px solid ${colors.border.default}` }}>
+                    <th style={{ padding: spacing.scale[2], textAlign: "left" }}>観点</th>
+                    <th style={{ padding: spacing.scale[2], textAlign: "left" }}>Server Component</th>
+                    <th style={{ padding: spacing.scale[2], textAlign: "left" }}>React Query</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style={{ borderBottom: `1px solid ${colors.border.subtle}` }}>
+                    <td style={{ padding: spacing.scale[2] }}><strong>実行環境</strong></td>
+                    <td style={{ padding: spacing.scale[2] }}>サーバー側のみ</td>
+                    <td style={{ padding: spacing.scale[2] }}>クライアント側のみ</td>
+                  </tr>
+                  <tr style={{ borderBottom: `1px solid ${colors.border.subtle}` }}>
+                    <td style={{ padding: spacing.scale[2] }}><strong>データ取得</strong></td>
+                    <td style={{ padding: spacing.scale[2] }}>fetch、DB直接アクセス可能</td>
+                    <td style={{ padding: spacing.scale[2] }}>APIエンドポイント経由のみ</td>
+                  </tr>
+                  <tr style={{ borderBottom: `1px solid ${colors.border.subtle}` }}>
+                    <td style={{ padding: spacing.scale[2] }}><strong>データ形式</strong></td>
+                    <td style={{ padding: spacing.scale[2] }}>RSC Payload（React専用ストリーム形式）</td>
+                    <td style={{ padding: spacing.scale[2] }}>JSON（REST API / GraphQL）</td>
+                  </tr>
+                  <tr style={{ borderBottom: `1px solid ${colors.border.subtle}` }}>
+                    <td style={{ padding: spacing.scale[2] }}><strong>キャッシュ</strong></td>
+                    <td style={{ padding: spacing.scale[2] }}>Next.js Data Cache（無期限デフォルト）</td>
+                    <td style={{ padding: spacing.scale[2] }}>React Query Cache（開発者が制御）</td>
+                  </tr>
+                  <tr style={{ borderBottom: `1px solid ${colors.border.subtle}` }}>
+                    <td style={{ padding: spacing.scale[2] }}><strong>再取得</strong></td>
+                    <td style={{ padding: spacing.scale[2] }}>ページ遷移時（Flight Payload経由）</td>
+                    <td style={{ padding: spacing.scale[2] }}>リアルタイム・手動refetch可能</td>
+                  </tr>
+                  <tr style={{ borderBottom: `1px solid ${colors.border.subtle}` }}>
+                    <td style={{ padding: spacing.scale[2] }}><strong>ローディング状態</strong></td>
+                    <td style={{ padding: spacing.scale[2] }}>Suspense境界で管理（デフォルト）</td>
+                    <td style={{ padding: spacing.scale[2] }}>Suspense対応可能 or isLoading等で細かく制御</td>
+                  </tr>
+                  <tr>
+                    <td style={{ padding: spacing.scale[2] }}><strong>適している用途</strong></td>
+                    <td style={{ padding: spacing.scale[2] }}>初期表示データ、SEO重要なデータ</td>
+                    <td style={{ padding: spacing.scale[2] }}>ユーザー操作に応じた動的データ</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* fetch vs React Query */}
+          <div>
+            <h3 style={{
+              fontSize: typography.heading.h6.fontSize,
+              fontWeight: typography.heading.h6.fontWeight,
+              color: colors.primitive.green[700],
+              marginBottom: spacing.scale[3]
+            }}>
+              2. fetch（単体）vs React Query
+            </h3>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: spacing.scale[3] }}>
+              <div>
+                <h4 style={{
+                  fontSize: typography.body.base.fontSize,
+                  fontWeight: 600,
+                  marginBottom: spacing.scale[2],
+                }}>
+                  fetch（単体）の問題点
+                </h4>
+                <ul style={{ marginLeft: spacing.scale[6], lineHeight: typography.lineHeight.relaxed }}>
+                  <li>キャッシュを自分で実装する必要がある</li>
+                  <li>ローディング・エラー状態を自分で管理</li>
+                  <li>重複リクエストの防止機能なし</li>
+                  <li>バックグラウンド更新の仕組みなし</li>
+                </ul>
+              </div>
+
+              <div>
+                <h4 style={{
+                  fontSize: typography.body.base.fontSize,
+                  fontWeight: 600,
+                  marginBottom: spacing.scale[2],
+                }}>
+                  React Queryが提供するもの
+                </h4>
+                <ul style={{ marginLeft: spacing.scale[6], lineHeight: typography.lineHeight.relaxed }}>
+                  <li><strong>自動キャッシュ:</strong> staleTime、cacheTimeで制御可能</li>
+                  <li><strong>状態管理:</strong> isLoading、isError、dataを自動管理</li>
+                  <li><strong>重複排除:</strong> 同じクエリは自動でまとめられる</li>
+                  <li><strong>バックグラウンド更新:</strong> refetchOnWindowFocus、refetchInterval</li>
+                  <li><strong>楽観的更新:</strong> mutationとの連携</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* 検索画面の例 */}
+          <div>
+            <h3 style={{
+              fontSize: typography.heading.h6.fontSize,
+              fontWeight: typography.heading.h6.fontWeight,
+              color: colors.primitive.orange[700],
+              marginBottom: spacing.scale[3]
+            }}>
+              3. 検索画面での責務分担（実例）
+            </h3>
+
+            <div style={{
+              padding: spacing.scale[4],
+              backgroundColor: colors.feedback.info.bg,
+              borderRadius: radii.borderRadius.md,
+              border: `1px solid ${colors.feedback.info.border}`,
+              marginBottom: spacing.scale[3]
+            }}>
+              <h4 style={{
+                fontSize: typography.body.base.fontSize,
+                fontWeight: 600,
+                marginBottom: spacing.scale[3],
+              }}>
+                パターンA: Server Component中心（推奨）
+              </h4>
+              <div style={{ marginBottom: spacing.scale[3] }}>
+                <strong>Server Component（page.tsx）:</strong>
+                <ul style={{ marginLeft: spacing.scale[6], lineHeight: typography.lineHeight.relaxed, marginTop: spacing.scale[1] }}>
+                  <li>URL searchParamsから検索条件を取得</li>
+                  <li>初期検索結果をサーバー側で取得</li>
+                  <li>SEOに対応（クローラーが結果を読める）</li>
+                </ul>
+              </div>
+              <div>
+                <strong>Client Component（SearchForm.tsx）:</strong>
+                <ul style={{ marginLeft: spacing.scale[6], lineHeight: typography.lineHeight.relaxed, marginTop: spacing.scale[1] }}>
+                  <li>検索フォームのUI</li>
+                  <li>フォーム送信時にURLを更新（router.push）</li>
+                  <li>→ Server Componentが再レンダリング（Flight Payload経由）</li>
+                </ul>
+              </div>
+            </div>
+
+            <div style={{
+              padding: spacing.scale[4],
+              backgroundColor: colors.background.subtle,
+              borderRadius: radii.borderRadius.md,
+              border: `1px solid ${colors.border.subtle}`
+            }}>
+              <h4 style={{
+                fontSize: typography.body.base.fontSize,
+                fontWeight: 600,
+                marginBottom: spacing.scale[3],
+              }}>
+                パターンB: React Query中心（SPA的アプローチ）
+              </h4>
+              <div style={{ marginBottom: spacing.scale[3] }}>
+                <strong>使うべきケース:</strong>
+                <ul style={{ marginLeft: spacing.scale[6], lineHeight: typography.lineHeight.relaxed, marginTop: spacing.scale[1] }}>
+                  <li>リアルタイム検索（入力ごとに結果更新）</li>
+                  <li>無限スクロール</li>
+                  <li>管理画面、マイページ（注文履歴、購入履歴など）</li>
+                  <li>社内ツール、ダッシュボード</li>
+                  <li>→ RSC不要。SEO不要で、ユーザー操作が多い画面</li>
+                </ul>
+              </div>
+              <div style={{ marginBottom: spacing.scale[3] }}>
+                <strong>実装:</strong>
+                <ul style={{ marginLeft: spacing.scale[6], lineHeight: typography.lineHeight.relaxed, marginTop: spacing.scale[1] }}>
+                  <li>全てClient Componentで構成（SPA的）</li>
+                  <li>useQueryで検索APIを呼び出し</li>
+                  <li>検索条件変更時に自動refetch</li>
+                  <li>キャッシュでUX向上（戻るボタンで即座に表示）</li>
+                  <li>Server Componentは使わず、Next.jsはルーティングのみ利用</li>
+                </ul>
+              </div>
+              <div style={{
+                padding: spacing.scale[3],
+                backgroundColor: "rgba(0, 0, 0, 0.05)",
+                borderRadius: radii.borderRadius.sm,
+                fontSize: typography.body.small.fontSize,
+              }}>
+                <strong>💡 Flight Payloadについて:</strong> この場合もページ遷移時にFlight Payloadリクエスト（<code>?_rsc=...</code>）は発生しますが、
+                Server Componentがないため中身はほぼ空（メタデータのみ）。実質的なデータ取得はReact Queryが担当します。
+              </div>
+            </div>
+
+            <div style={{
+              padding: spacing.scale[4],
+              backgroundColor: colors.primitive.orange[50],
+              borderRadius: radii.borderRadius.md,
+              border: `1px solid ${colors.primitive.orange[200]}`,
+              marginBottom: spacing.scale[3]
+            }}>
+              <h4 style={{
+                fontSize: typography.body.base.fontSize,
+                fontWeight: 600,
+                marginBottom: spacing.scale[3],
+                color: colors.primitive.orange[800]
+              }}>
+                パターンC: 基幹システムの検索
+              </h4>
+              <div style={{ marginBottom: spacing.scale[3] }}>
+                <strong>特徴:</strong>
+                <ul style={{ marginLeft: spacing.scale[6], lineHeight: typography.lineHeight.relaxed, marginTop: spacing.scale[1] }}>
+                  <li>在庫管理、受発注、顧客管理などの社内システム</li>
+                  <li>複雑な検索条件（10個以上のフィルタも）</li>
+                  <li>高度なソート・ページング機能</li>
+                  <li>データ量が多い（数万〜数十万件）</li>
+                  <li>SEO完全不要（社内ユーザーのみ）</li>
+                </ul>
+              </div>
+              <div style={{ marginBottom: spacing.scale[3] }}>
+                <strong>実装:</strong>
+                <ul style={{ marginLeft: spacing.scale[6], lineHeight: typography.lineHeight.relaxed, marginTop: spacing.scale[1] }}>
+                  <li>全てClient Component + React Query</li>
+                  <li>検索条件をURLに同期（共有・ブックマーク可能に）</li>
+                  <li>useQueryのkeyに検索条件を含める（自動キャッシュ）</li>
+                  <li>サーバー側でページングとフィルタリング</li>
+                  <li>仮想スクロール（react-window）で大量データを表示</li>
+                </ul>
+              </div>
+              <div style={{
+                padding: spacing.scale[3],
+                backgroundColor: "rgba(0, 0, 0, 0.05)",
+                borderRadius: radii.borderRadius.sm,
+                fontSize: typography.body.small.fontSize,
+              }}>
+                <strong>💡 ポイント:</strong> URLに検索条件を保持しつつ、React Queryでキャッシュ。
+                「戻る」ボタンで前の検索結果が即座に表示される高速UX。Server Component不要。
+              </div>
+            </div>
+
+            <div style={{
+              padding: spacing.scale[4],
+              backgroundColor: colors.feedback.warning.bg,
+              borderRadius: radii.borderRadius.md,
+              border: `1px solid ${colors.feedback.warning.border}`,
+              marginBottom: spacing.scale[3]
+            }}>
+              <h4 style={{
+                fontSize: typography.body.base.fontSize,
+                fontWeight: 600,
+                marginBottom: spacing.scale[3],
+              }}>
+                パターンD: fetchのみ（React Query使わない）
+              </h4>
+              <div style={{ marginBottom: spacing.scale[3] }}>
+                <strong>使うべきケース:</strong>
+                <ul style={{ marginLeft: spacing.scale[6], lineHeight: typography.lineHeight.relaxed, marginTop: spacing.scale[1] }}>
+                  <li>小規模・シンプルな画面</li>
+                  <li>1回だけデータを取得すれば十分</li>
+                  <li>キャッシュやリトライ機能が不要</li>
+                </ul>
+              </div>
+              <div style={{ marginBottom: spacing.scale[3] }}>
+                <strong>問題点:</strong>
+                <ul style={{ marginLeft: spacing.scale[6], lineHeight: typography.lineHeight.relaxed, marginTop: spacing.scale[1] }}>
+                  <li>ローディング・エラー状態を自分で管理</li>
+                  <li>キャッシュなし（同じデータを何度も取得）</li>
+                  <li>重複リクエストの制御なし</li>
+                  <li>画面が複雑になると状態管理が煩雑化</li>
+                </ul>
+              </div>
+              <div style={{
+                padding: spacing.scale[3],
+                backgroundColor: "rgba(0, 0, 0, 0.05)",
+                borderRadius: radii.borderRadius.sm,
+                fontSize: typography.body.small.fontSize,
+              }}>
+                <strong>💡 推奨:</strong> 小規模なら問題ないが、画面が成長する可能性があるならReact Queryを最初から使う方が良い
+              </div>
+            </div>
+
+            <div style={{
+              padding: spacing.scale[4],
+              backgroundColor: colors.primitive.pink[50],
+              borderRadius: radii.borderRadius.md,
+              border: `1px solid ${colors.primitive.pink[200]}`,
+              marginBottom: spacing.scale[3]
+            }}>
+              <h4 style={{
+                fontSize: typography.body.base.fontSize,
+                fontWeight: 600,
+                marginBottom: spacing.scale[3],
+                color: colors.primitive.pink[800]
+              }}>
+                パターンE: React Queryのみ（ECサイトでも使える？）
+              </h4>
+              <div style={{ marginBottom: spacing.scale[3] }}>
+                <strong>メリット:</strong>
+                <ul style={{ marginLeft: spacing.scale[6], lineHeight: typography.lineHeight.relaxed, marginTop: spacing.scale[1] }}>
+                  <li>実装がシンプル（全てClient Component）</li>
+                  <li>リアルタイム更新が容易</li>
+                  <li>キャッシュ戦略を細かく制御可能</li>
+                </ul>
+              </div>
+              <div style={{ marginBottom: spacing.scale[3] }}>
+                <strong>デメリット:</strong>
+                <ul style={{ marginLeft: spacing.scale[6], lineHeight: typography.lineHeight.relaxed, marginTop: spacing.scale[1] }}>
+                  <li><strong>SEO不利:</strong> 検索エンジンが商品データを読めない</li>
+                  <li><strong>初期表示が遅い:</strong> クライアントでAPIリクエスト → データ取得 → 描画</li>
+                  <li><strong>ローディング画面:</strong> ユーザーは必ず読み込み待ち</li>
+                </ul>
+              </div>
+              <div style={{
+                padding: spacing.scale[3],
+                backgroundColor: "rgba(0, 0, 0, 0.05)",
+                borderRadius: radii.borderRadius.sm,
+                fontSize: typography.body.small.fontSize,
+              }}>
+                <strong>⚠️ 結論:</strong> ECサイトでReact QueryのみはNG。SEOが重要なため、少なくとも初期表示はServer Componentで。
+              </div>
+            </div>
+
+            <div style={{
+              padding: spacing.scale[4],
+              backgroundColor: colors.feedback.success.bg,
+              borderRadius: radii.borderRadius.md,
+              border: `1px solid ${colors.feedback.success.border}`
+            }}>
+              <h4 style={{
+                fontSize: typography.body.base.fontSize,
+                fontWeight: 600,
+                marginBottom: spacing.scale[3],
+                color: colors.feedback.success.text
+              }}>
+                パターンF: ハイブリッド（ECサイト推奨 ✨）
+              </h4>
+              <div style={{ marginBottom: spacing.scale[3] }}>
+                <strong style={{ color: colors.feedback.success.text }}>Server Component（page.tsx）:</strong>
+                <ul style={{ marginLeft: spacing.scale[6], lineHeight: typography.lineHeight.relaxed, marginTop: spacing.scale[1], color: colors.feedback.success.text }}>
+                  <li>URL searchParamsから検索条件を取得</li>
+                  <li>初期検索結果をサーバー側で取得（SEO対応）</li>
+                  <li>商品リストの基本データを配信</li>
+                </ul>
+              </div>
+              <div style={{ marginBottom: spacing.scale[3] }}>
+                <strong style={{ color: colors.feedback.success.text }}>React Query（Client Component）:</strong>
+                <ul style={{ marginLeft: spacing.scale[6], lineHeight: typography.lineHeight.relaxed, marginTop: spacing.scale[1], color: colors.feedback.success.text }}>
+                  <li>フィルタ変更時の再検索（価格帯、色、サイズなど）</li>
+                  <li>無限スクロール（次のページ読み込み）</li>
+                  <li>在庫状況のリアルタイム更新</li>
+                  <li>お気に入り・カート状態の同期</li>
+                </ul>
+              </div>
+              <div style={{
+                padding: spacing.scale[3],
+                backgroundColor: "rgba(0, 0, 0, 0.1)",
+                borderRadius: radii.borderRadius.sm,
+                fontSize: typography.body.small.fontSize,
+                color: colors.feedback.success.text
+              }}>
+                <strong>✅ 最強の組み合わせ:</strong> SEOとUXを両立。初期表示は高速でクローラーにも優しく、ユーザー操作には即座に反応。
+              </div>
+            </div>
+          </div>
+
+          {/* キャッシュ戦略 */}
+          <div>
+            <h3 style={{
+              fontSize: typography.heading.h6.fontSize,
+              fontWeight: typography.heading.h6.fontWeight,
+              color: colors.primitive.pink[700],
+              marginBottom: spacing.scale[3]
+            }}>
+              4. キャッシュ戦略の違い
+            </h3>
+
+            <div style={{
+              padding: spacing.scale[4],
+              backgroundColor: "rgba(0, 0, 0, 0.05)",
+              borderRadius: radii.borderRadius.md,
+            }}>
+              <table style={{
+                width: "100%",
+                borderCollapse: "collapse",
+                fontSize: typography.body.small.fontSize,
+              }}>
+                <thead>
+                  <tr style={{ borderBottom: `2px solid ${colors.border.default}` }}>
+                    <th style={{ padding: spacing.scale[2], textAlign: "left" }}>種類</th>
+                    <th style={{ padding: spacing.scale[2], textAlign: "left" }}>場所</th>
+                    <th style={{ padding: spacing.scale[2], textAlign: "left" }}>デフォルト期限</th>
+                    <th style={{ padding: spacing.scale[2], textAlign: "left" }}>無効化方法</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style={{ borderBottom: `1px solid ${colors.border.subtle}` }}>
+                    <td style={{ padding: spacing.scale[2] }}><strong>Next.js Data Cache</strong></td>
+                    <td style={{ padding: spacing.scale[2] }}>サーバー側（ビルド/実行時）</td>
+                    <td style={{ padding: spacing.scale[2] }}>無期限</td>
+                    <td style={{ padding: spacing.scale[2] }}>revalidate、revalidatePath</td>
+                  </tr>
+                  <tr style={{ borderBottom: `1px solid ${colors.border.subtle}` }}>
+                    <td style={{ padding: spacing.scale[2] }}><strong>Router Cache</strong></td>
+                    <td style={{ padding: spacing.scale[2] }}>クライアント側（ブラウザのメモリ）</td>
+                    <td style={{ padding: spacing.scale[2] }}>30秒〜5分</td>
+                    <td style={{ padding: spacing.scale[2] }}>router.refresh()</td>
+                  </tr>
+                  <tr>
+                    <td style={{ padding: spacing.scale[2] }}><strong>React Query Cache</strong></td>
+                    <td style={{ padding: spacing.scale[2] }}>クライアント側（ブラウザのメモリ）</td>
+                    <td style={{ padding: spacing.scale[2] }}>staleTime: 0, cacheTime: 5分</td>
+                    <td style={{ padding: spacing.scale[2] }}>queryClient.invalidateQueries</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* まとめ */}
+          <div style={{
+            padding: spacing.scale[4],
+            backgroundColor: colors.feedback.success.bg,
+            borderRadius: radii.borderRadius.md,
+            border: `1px solid ${colors.feedback.success.border}`
+          }}>
+            <h4 style={{
+              fontSize: typography.body.base.fontSize,
+              fontWeight: 600,
+              marginBottom: spacing.scale[2],
+              color: colors.feedback.success.text
+            }}>
+              💡 推奨アプローチ
+            </h4>
+            <ul style={{
+              marginLeft: spacing.scale[6],
+              lineHeight: typography.lineHeight.relaxed,
+              color: colors.feedback.success.text
+            }}>
+              <li><strong>初期表示:</strong> Server Componentでデータ取得（Flight Payload経由で配信）</li>
+              <li><strong>動的更新:</strong> Client Component + React Queryで必要な部分だけ更新</li>
+              <li><strong>検索:</strong> SEO重要ならServer Component、リアルタイム性重視ならReact Query</li>
+              <li><strong>キャッシュ:</strong> Next.jsのData Cacheは静的データ、React Queryは動的データ向け</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div style={{
+        marginTop: spacing.scale[8],
         display: "flex",
         gap: spacing.scale[4]
       }}>

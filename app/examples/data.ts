@@ -50,6 +50,11 @@ export const examplesData: Record<string, ExampleInfo> = {
     description: "npm run build と tsc の違いを理解するための解説ページ。",
     tags: ["TypeScript", "Build", "Documentation"],
   },
+  "rsc-react-query-hybrid": {
+    title: "RSC + React Query ハイブリッド",
+    description: "Server ComponentとReact Queryを組み合わせた最強パターンの実装例。",
+    tags: ["RSC", "React Query", "Hybrid", "Performance"],
+  },
 };
 
 export type ExamplesData = typeof examplesData;

@@ -3,7 +3,13 @@
 import Link from "next/link";
 import { Text } from "@/src/design-system/components/Text";
 import { Button } from "@/src/design-system/components";
-import { colors, spacing, typography, radii, shadows } from "@/src/design-system/tokens";
+import {
+  colors,
+  spacing,
+  typography,
+  radii,
+  shadows,
+} from "@/src/design-system/tokens";
 import { ArrowRight, BookOpen, CheckSquare, Layers } from "lucide-react";
 import type { CSSProperties } from "react";
 
@@ -252,14 +258,16 @@ const features = [
   {
     icon: <BookOpen size={24} />,
     title: "Examples",
-    description: "実装例とデモのコレクション。フォーム、React Hooksの学習デモなど、実践的なサンプルコードを確認できます。",
+    description:
+      "実装例とデモのコレクション。フォーム、React Hooksの学習デモなど、実践的なサンプルコードを確認できます。",
     href: "/examples",
     buttonText: "Examples を見る",
   },
   {
     icon: <CheckSquare size={24} />,
     title: "Todos アプリ",
-    description: "タスク管理アプリケーション。CRUD操作、状態管理、UIコンポーネントの実装例を体験できます。",
+    description:
+      "タスク管理アプリケーション。CRUD操作、状態管理、UIコンポーネントの実装例を体験できます。",
     href: "/todos",
     buttonText: "Todos を開く",
   },
@@ -274,17 +282,24 @@ const heroStats = [
 const tracks = [
   {
     title: "UI コンポーネント設計",
-    description: "Typography・Spacing・Shadowなどのトークンを活用して、アクセシビリティ対応のコンポーネントを組み立てます。",
-    highlights: ["デザインシステムの原則", "Story firstな開発", "ライト/ダーク考慮"],
+    description:
+      "Typography・Spacing・Shadowなどのトークンを活用して、アクセシビリティ対応のコンポーネントを組み立てます。",
+    highlights: [
+      "デザインシステムの原則",
+      "Story firstな開発",
+      "ライト/ダーク考慮",
+    ],
   },
   {
     title: "状態管理 & Hooks",
-    description: "React Hooksとカスタムフックでデータフローを整理。フォームやポイントなインタラクションを段階的に学べます。",
+    description:
+      "React Hooksとカスタムフックでデータフローを整理。フォームやポイントなインタラクションを段階的に学べます。",
     highlights: ["フォームのバリデーション", "Server Actions", "Custom Hooks"],
   },
   {
     title: "フルスタック実装",
-    description: "Todosアプリを通じてPrisma・API Routes・Playwrightを横断。Next.jsで完結する開発体験を掴みます。",
+    description:
+      "Todosアプリを通じてPrisma・API Routes・Playwrightを横断。Next.jsで完結する開発体験を掴みます。",
     highlights: ["Prisma & DB", "E2Eテスト", "UI/データ同期"],
   },
 ];
@@ -316,7 +331,11 @@ export default function Home() {
             </p>
             <div style={styles.heroActions}>
               <Link href="/examples" style={styles.heroPrimaryLink}>
-                <Button variant="primary" size="lg" icon={<ArrowRight size={18} />}>
+                <Button
+                  variant="primary"
+                  size="lg"
+                  icon={<ArrowRight size={18} />}
+                >
                   Examples を見る
                 </Button>
               </Link>
@@ -342,7 +361,8 @@ export default function Home() {
             </Text>
             <h2 style={styles.sectionTitle}>学習の起点となるエリア</h2>
             <p style={styles.sectionDescription}>
-              具体的なアプリやコンポーネントを触りながら、Next.jsのApp Router、デザインシステム、テスト戦略を一気に理解します。
+              具体的なアプリやコンポーネントを触りながら、Next.jsのApp
+              Router、デザインシステム、テスト戦略を一気に理解します。
             </p>
           </div>
           <div style={styles.featureGrid}>
@@ -409,7 +429,12 @@ function FeatureCard({
       <h3 style={styles.cardTitle}>{title}</h3>
       <p style={styles.cardDescription}>{description}</p>
       <Link href={href}>
-        <Button variant="primary" size="md" icon={<ArrowRight size={16} />} style={styles.cardButton}>
+        <Button
+          variant="primary"
+          size="md"
+          icon={<ArrowRight size={16} />}
+          style={styles.cardButton}
+        >
           {buttonText}
         </Button>
       </Link>

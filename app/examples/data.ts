@@ -55,6 +55,11 @@ export const examplesData: Record<string, ExampleInfo> = {
     description: "Server ComponentとReact Queryを組み合わせた最強パターンの実装例。",
     tags: ["RSC", "React Query", "Hybrid", "Performance"],
   },
+  "react-query-vs-swr": {
+    title: "React Query vs SWR 比較デモ",
+    description: "実際のコードで両者の違いを体験できる比較デモ。mutation管理、検索パラメータ、キャッシュ無効化を実装例で理解。",
+    tags: ["React Query", "SWR", "Comparison", "Data Fetching"],
+  },
 };
 
 export type ExamplesData = typeof examplesData;

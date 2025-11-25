@@ -496,7 +496,7 @@ setParams({ status: 'active' })`}
               >
                 {`const [params, setParams] = useState({ status: 'all' })
 
-// URL文字列を構築 ← 面倒
+// SWR: URL文字列がキーとして機能 ← URL構築が必要
 const url = \`/api/items?\${new URLSearchParams(params).toString()}\`
 const { data } = useSWR(url, fetcher)
 
@@ -541,7 +541,7 @@ queryClient.invalidateQueries({ queryKey: ['items'] })
                   overflow: "auto",
                 }}
               >
-                {`// URL個別指定が必要
+                {`// SWR: URL文字列キーを個別指定して無効化
 mutate('/api/items')
 mutate('/api/items/123')
 mutate((key) => typeof key === 'string' && key.startsWith('/api/items'))`}
@@ -713,7 +713,7 @@ const { data: offices } = useQuery({
               >
                 {`const { data: regions } = useSWR('/api/regions', fetcher)
 
-// 手動で条件分岐が必要
+// SWR: URL文字列がキー、null で待機状態を表現
 const { data: prefectures } = useSWR(
   selectedRegion ? \`/api/prefectures?region=\${selectedRegion}\` : null,
   fetcher
@@ -729,11 +729,653 @@ const { data: offices } = useSWR(
   fetcher
 )
 
-// URL構築とnullチェックが冗長`}
+// 各階層でURL構築とnullチェックが必要`}
               </pre>
             </>
           )}
         </div>
+      </div>
+
+      {/* 重要な概念: enabled と mutate の違い */}
+      <div style={{ marginTop: spacing.scale[12] }}>
+        <Text variant="h2" style={{ marginBottom: spacing.scale[6] }}>
+          重要な概念: enabled と mutate の違い
+        </Text>
+        <div
+          style={{
+            padding: spacing.scale[6],
+            backgroundColor: colors.background.subtle,
+            borderRadius: radii.card.md,
+            marginBottom: spacing.scale[6],
+          }}
+        >
+          <Text variant="h3" style={{ marginBottom: spacing.scale[4] }}>
+            enabled とは（React Query）
+          </Text>
+          <Text variant="body" style={{ marginBottom: spacing.scale[4] }}>
+            <strong>データを取得（fetch）するかどうかの条件</strong>
+          </Text>
+          <ul style={{ marginLeft: spacing.scale[6] }}>
+            <li>
+              <Text variant="body">
+                <code>enabled: true</code> → API リクエストを送る
+              </Text>
+            </li>
+            <li>
+              <Text variant="body">
+                <code>enabled: false</code> → API リクエストを送らない（待機状態）
+              </Text>
+            </li>
+          </ul>
+        </div>
+
+        <div
+          style={{
+            padding: spacing.scale[6],
+            backgroundColor: colors.background.subtle,
+            borderRadius: radii.card.md,
+            marginBottom: spacing.scale[6],
+          }}
+        >
+          <Text variant="h3" style={{ marginBottom: spacing.scale[4] }}>
+            mutate / invalidateQueries とは
+          </Text>
+          <Text variant="body">
+            <strong>キャッシュを更新・無効化する関数</strong>。ボタンクリック時など、任意のタイミングでキャッシュを手動で無効化・再取得する。
+          </Text>
+        </div>
+
+        <div style={{ overflowX: "auto" }}>
+          <table
+            style={{
+              width: "100%",
+              borderCollapse: "collapse",
+              backgroundColor: colors.background.default,
+              borderRadius: radii.card.md,
+            }}
+          >
+            <thead>
+              <tr style={{ backgroundColor: colors.background.subtle }}>
+                <th
+                  style={{
+                    padding: spacing.scale[4],
+                    textAlign: "left",
+                    borderBottom: `2px solid ${colors.border.default}`,
+                    fontWeight: 600,
+                  }}
+                ></th>
+                <th
+                  style={{
+                    padding: spacing.scale[4],
+                    textAlign: "left",
+                    borderBottom: `2px solid ${colors.border.default}`,
+                    fontWeight: 600,
+                  }}
+                >
+                  用途
+                </th>
+                <th
+                  style={{
+                    padding: spacing.scale[4],
+                    textAlign: "left",
+                    borderBottom: `2px solid ${colors.border.default}`,
+                    fontWeight: 600,
+                  }}
+                >
+                  タイミング
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td
+                  style={{
+                    padding: spacing.scale[4],
+                    borderBottom: `1px solid ${colors.border.default}`,
+                    fontWeight: 600,
+                  }}
+                >
+                  enabled
+                </td>
+                <td
+                  style={{
+                    padding: spacing.scale[4],
+                    borderBottom: `1px solid ${colors.border.default}`,
+                  }}
+                >
+                  データを取得するかどうかの<strong>条件</strong>
+                </td>
+                <td
+                  style={{
+                    padding: spacing.scale[4],
+                    borderBottom: `1px solid ${colors.border.default}`,
+                  }}
+                >
+                  初回レンダー時・依存値が変わった時
+                </td>
+              </tr>
+              <tr>
+                <td
+                  style={{
+                    padding: spacing.scale[4],
+                    fontWeight: 600,
+                  }}
+                >
+                  mutate / invalidateQueries
+                </td>
+                <td style={{ padding: spacing.scale[4] }}>
+                  キャッシュを<strong>手動で更新・無効化</strong>
+                </td>
+                <td style={{ padding: spacing.scale[4] }}>
+                  ボタンクリック時など、任意のタイミング
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* enabled の嬉しさ */}
+      <div style={{ marginTop: spacing.scale[12] }}>
+        <Text variant="h2" style={{ marginBottom: spacing.scale[6] }}>
+          enabled の嬉しさ
+        </Text>
+        <Text variant="body" style={{ marginBottom: spacing.scale[6] }}>
+          <code>enabled</code> は React Query の<strong>最も強力な機能の1つ</strong>
+          。SWRの <code>null</code> パターンと比較して、以下の点で優れている。
+        </Text>
+
+        <div
+          style={{
+            padding: spacing.scale[6],
+            backgroundColor: "#e8f5e9",
+            borderRadius: radii.card.md,
+            marginBottom: spacing.scale[6],
+          }}
+        >
+          <Text variant="h3" style={{ marginBottom: spacing.scale[4] }}>
+            1. 宣言的で読みやすい
+          </Text>
+          <pre
+            style={{
+              backgroundColor: "#1e1e1e",
+              color: "#d4d4d4",
+              padding: spacing.scale[4],
+              borderRadius: radii.input.md,
+              overflow: "auto",
+              marginBottom: spacing.scale[4],
+            }}
+          >
+            {`// React Query: 宣言的で読みやすい
+const { data: user } = useQuery({
+  queryKey: ['user', userId],
+  queryFn: () => getUser(userId),
+  enabled: !!userId, // userIdがあるときだけ実行
+})
+
+const { data: posts } = useQuery({
+  queryKey: ['posts', userId],
+  queryFn: () => getPosts(userId),
+  enabled: !!user, // userが取得できたら実行
+})`}
+          </pre>
+          <pre
+            style={{
+              backgroundColor: "#1e1e1e",
+              color: "#d4d4d4",
+              padding: spacing.scale[4],
+              borderRadius: radii.input.md,
+              overflow: "auto",
+            }}
+          >
+            {`// SWR: 命令的で条件分岐が必要
+const { data: user } = useSWR(
+  userId ? \`/api/users/\${userId}\` : null, // ← nullで「実行しない」を表現
+  fetcher
+)
+
+const { data: posts } = useSWR(
+  user ? \`/api/posts?userId=\${user.id}\` : null, // ← 三項演算子が増える
+  fetcher
+)`}
+          </pre>
+        </div>
+
+        <div
+          style={{
+            padding: spacing.scale[6],
+            backgroundColor: "#e8f5e9",
+            borderRadius: radii.card.md,
+            marginBottom: spacing.scale[6],
+          }}
+        >
+          <Text variant="h3" style={{ marginBottom: spacing.scale[4] }}>
+            2. 複数条件を組み合わせやすい
+          </Text>
+          <pre
+            style={{
+              backgroundColor: "#1e1e1e",
+              color: "#d4d4d4",
+              padding: spacing.scale[4],
+              borderRadius: radii.input.md,
+              overflow: "auto",
+              marginBottom: spacing.scale[4],
+            }}
+          >
+            {`// React Query: 複数条件をAND/ORで組み合わせやすい
+const { data } = useQuery({
+  queryKey: ['data', params],
+  queryFn: () => fetchData(params),
+  enabled: isAuthenticated && hasPermission && params.id > 0,
+})`}
+          </pre>
+          <pre
+            style={{
+              backgroundColor: "#1e1e1e",
+              color: "#d4d4d4",
+              padding: spacing.scale[4],
+              borderRadius: radii.input.md,
+              overflow: "auto",
+            }}
+          >
+            {`// SWR: URL構築に条件を埋め込む必要がある（複雑になりやすい）
+const url = (isAuthenticated && hasPermission && params.id > 0)
+  ? \`/api/data?id=\${params.id}\`
+  : null
+const { data } = useSWR(url, fetcher)`}
+          </pre>
+        </div>
+
+        <div
+          style={{
+            padding: spacing.scale[6],
+            backgroundColor: "#e8f5e9",
+            borderRadius: radii.card.md,
+            marginBottom: spacing.scale[6],
+          }}
+        >
+          <Text variant="h3" style={{ marginBottom: spacing.scale[4] }}>
+            3. 「取得するか」と「何を取得するか」を分離できる
+          </Text>
+          <pre
+            style={{
+              backgroundColor: "#1e1e1e",
+              color: "#d4d4d4",
+              padding: spacing.scale[4],
+              borderRadius: radii.input.md,
+              overflow: "auto",
+              marginBottom: spacing.scale[4],
+            }}
+          >
+            {`// React Query: 関心の分離
+const { data } = useQuery({
+  queryKey: ['items', searchParams], // ← 何を取得するか（キー）
+  queryFn: () => getItems(searchParams), // ← どう取得するか
+  enabled: searchParams.query.length > 2, // ← いつ取得するか（条件）
+})`}
+          </pre>
+          <pre
+            style={{
+              backgroundColor: "#1e1e1e",
+              color: "#d4d4d4",
+              padding: spacing.scale[4],
+              borderRadius: radii.input.md,
+              overflow: "auto",
+            }}
+          >
+            {`// SWR: URL構築とタイミング制御が混在
+const url = searchParams.query.length > 2
+  ? \`/api/items?query=\${searchParams.query}\` // ← 条件とURL構築が混在
+  : null
+const { data } = useSWR(url, fetcher)`}
+          </pre>
+        </div>
+
+        <div
+          style={{
+            padding: spacing.scale[6],
+            backgroundColor: "#e8f5e9",
+            borderRadius: radii.card.md,
+            marginBottom: spacing.scale[6],
+          }}
+        >
+          <Text variant="h3" style={{ marginBottom: spacing.scale[4] }}>
+            4. デバッグしやすい
+          </Text>
+          <Text variant="body" style={{ marginBottom: spacing.scale[4] }}>
+            React Query DevTools で <code>enabled</code> の状態が可視化される。
+            <code>disabled</code> と表示されるため、なぜリクエストが送信されないか一目で分かる。
+          </Text>
+          <Text variant="body">
+            SWR では <code>null</code> が渡されているだけなので、デバッグが難しい。
+          </Text>
+        </div>
+
+        <div
+          style={{
+            padding: spacing.scale[6],
+            backgroundColor: colors.feedback.success.bg,
+            borderRadius: radii.card.md,
+          }}
+        >
+          <Text variant="h3" style={{ marginBottom: spacing.scale[4] }}>
+            まとめ
+          </Text>
+          <ul style={{ marginLeft: spacing.scale[6] }}>
+            <li>
+              <Text variant="body">
+                <strong>宣言的で読みやすい</strong>（三項演算子が不要）
+              </Text>
+            </li>
+            <li>
+              <Text variant="body">
+                <strong>複数条件を組み合わせやすい</strong>
+              </Text>
+            </li>
+            <li>
+              <Text variant="body">
+                <strong>関心の分離</strong>（キー、フェッチ処理、実行条件を分離）
+              </Text>
+            </li>
+            <li>
+              <Text variant="body">
+                <strong>デバッグしやすい</strong>（DevToolsで状態が可視化される）
+              </Text>
+            </li>
+          </ul>
+          <Text variant="body" style={{ marginTop: spacing.scale[4] }}>
+            特に<strong>4階層プルダウンのような複雑な依存関係</strong>がある場合、SWRの{" "}
+            <code>null</code> パターンは冗長になりがちだが、React Queryの <code>enabled</code>{" "}
+            は<strong>シンプルで保守しやすい</strong>コードになる。
+          </Text>
+        </div>
+      </div>
+
+      {/* invalidateQueries が必要なケース */}
+      <div style={{ marginTop: spacing.scale[12] }}>
+        <Text variant="h2" style={{ marginBottom: spacing.scale[6] }}>
+          invalidateQueries が必要なケース
+        </Text>
+        <div
+          style={{
+            padding: spacing.scale[6],
+            backgroundColor: "#e8f5e9",
+            borderRadius: radii.card.md,
+            marginBottom: spacing.scale[6],
+          }}
+        >
+          <Text variant="body" style={{ marginBottom: spacing.scale[4] }}>
+            依存クエリ（4階層プルダウン）では <code>invalidateQueries</code> を
+            <strong>使わなくていい</strong>。理由：
+          </Text>
+          <Text variant="body" style={{ fontWeight: 600 }}>
+            queryKey が変わると、React Query は自動的に新しいクエリとして扱うから。
+          </Text>
+        </div>
+
+        <pre
+          style={{
+            backgroundColor: "#1e1e1e",
+            color: "#d4d4d4",
+            padding: spacing.scale[4],
+            borderRadius: radii.input.md,
+            overflow: "auto",
+            marginBottom: spacing.scale[6],
+          }}
+        >
+          {`// 東京を選択した時
+queryKey: ["cities", "tokyo"] // ← このキャッシュを使う
+
+// 大阪に変更した時
+queryKey: ["cities", "osaka"] // ← 全く別のキャッシュとして扱われる
+
+// 古い "tokyo" のキャッシュは自動的に無視される（GCで削除）`}
+        </pre>
+
+        <div
+          style={{
+            padding: spacing.scale[6],
+            backgroundColor: "#fff3e0",
+            borderRadius: radii.card.md,
+            marginBottom: spacing.scale[6],
+          }}
+        >
+          <Text variant="h3" style={{ marginBottom: spacing.scale[4] }}>
+            invalidateQueries が必要なケース
+          </Text>
+          <Text variant="body" style={{ marginBottom: spacing.scale[4] }}>
+            <strong>同じ queryKey のデータを更新した時</strong>
+          </Text>
+          <pre
+            style={{
+              backgroundColor: "#1e1e1e",
+              color: "#d4d4d4",
+              padding: spacing.scale[4],
+              borderRadius: radii.input.md,
+              overflow: "auto",
+              marginBottom: spacing.scale[4],
+            }}
+          >
+            {`const deleteMutation = useMutation({
+  mutationFn: deleteItem,
+  onSuccess: () => {
+    // 削除後、同じqueryKeyのキャッシュを無効化して再取得
+    queryClient.invalidateQueries({ queryKey: ["items"] })
+  }
+})`}
+          </pre>
+          <Text variant="body-small">
+            この場合：queryKey は <code>["items"]</code>{" "}
+            のまま変わらないが、サーバー側のデータは変わった（削除された）。だから{" "}
+            <code>invalidateQueries</code> で「キャッシュは古いよ、再取得して」と伝える必要がある。
+          </Text>
+        </div>
+
+        <div style={{ overflowX: "auto" }}>
+          <table
+            style={{
+              width: "100%",
+              borderCollapse: "collapse",
+              backgroundColor: colors.background.default,
+              borderRadius: radii.card.md,
+            }}
+          >
+            <thead>
+              <tr style={{ backgroundColor: colors.background.subtle }}>
+                <th
+                  style={{
+                    padding: spacing.scale[4],
+                    textAlign: "left",
+                    borderBottom: `2px solid ${colors.border.default}`,
+                    fontWeight: 600,
+                  }}
+                >
+                  ケース
+                </th>
+                <th
+                  style={{
+                    padding: spacing.scale[4],
+                    textAlign: "left",
+                    borderBottom: `2px solid ${colors.border.default}`,
+                    fontWeight: 600,
+                  }}
+                >
+                  invalidateQueries 必要？
+                </th>
+                <th
+                  style={{
+                    padding: spacing.scale[4],
+                    textAlign: "left",
+                    borderBottom: `2px solid ${colors.border.default}`,
+                    fontWeight: 600,
+                  }}
+                >
+                  理由
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td
+                  style={{
+                    padding: spacing.scale[4],
+                    borderBottom: `1px solid ${colors.border.default}`,
+                    fontWeight: 600,
+                  }}
+                >
+                  依存クエリ（4階層プルダウン）
+                </td>
+                <td
+                  style={{
+                    padding: spacing.scale[4],
+                    borderBottom: `1px solid ${colors.border.default}`,
+                  }}
+                >
+                  <strong>不要</strong>
+                </td>
+                <td
+                  style={{
+                    padding: spacing.scale[4],
+                    borderBottom: `1px solid ${colors.border.default}`,
+                  }}
+                >
+                  queryKey が変わるので自動的に新しいクエリになる
+                </td>
+              </tr>
+              <tr>
+                <td
+                  style={{
+                    padding: spacing.scale[4],
+                    fontWeight: 600,
+                  }}
+                >
+                  Mutation後のリスト更新
+                </td>
+                <td style={{ padding: spacing.scale[4] }}>
+                  <strong>必要</strong>
+                </td>
+                <td style={{ padding: spacing.scale[4] }}>
+                  queryKey は同じだがサーバー側のデータが変わった
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* 結論 */}
+      <div style={{ marginTop: spacing.scale[12] }}>
+        <Text variant="h2" style={{ marginBottom: spacing.scale[6] }}>
+          結論
+        </Text>
+        <div
+          style={{
+            padding: spacing.scale[6],
+            backgroundColor: colors.feedback.success.bg,
+            borderRadius: radii.card.md,
+            marginBottom: spacing.scale[6],
+          }}
+        >
+          <Text variant="h3" style={{ marginBottom: spacing.scale[4] }}>
+            4階層の依存関係がある場合、React Query の方が圧倒的に楽で安全
+          </Text>
+          <ul style={{ marginLeft: spacing.scale[6] }}>
+            <li>
+              <Text variant="body">
+                <strong>React Query:</strong> enabled + queryKey の自動管理
+              </Text>
+            </li>
+            <li>
+              <Text variant="body">
+                <strong>SWR:</strong> URL 構築 + null 条件分岐 + 手動 mutate
+              </Text>
+            </li>
+          </ul>
+        </div>
+
+        <Text variant="h3" style={{ marginBottom: spacing.scale[4] }}>
+          React Query を選ぶべきケース
+        </Text>
+        <ul style={{ marginLeft: spacing.scale[6], marginBottom: spacing.scale[6] }}>
+          <li>
+            <Text variant="body">
+              <strong>複雑な依存関係がある場合</strong>（4階層プルダウンなど）
+            </Text>
+          </li>
+          <li>
+            <Text variant="body">
+              <strong>Mutation が多い場合</strong>
+            </Text>
+          </li>
+          <li>
+            <Text variant="body">
+              <strong>楽観的更新が必要な場合</strong>
+            </Text>
+          </li>
+          <li>
+            <Text variant="body">
+              <strong>中〜大規模なプロジェクト</strong>
+            </Text>
+          </li>
+        </ul>
+
+        <Text variant="h3" style={{ marginBottom: spacing.scale[4] }}>
+          SWR を選ぶべきケース
+        </Text>
+        <ul style={{ marginLeft: spacing.scale[6], marginBottom: spacing.scale[6] }}>
+          <li>
+            <Text variant="body">
+              <strong>小規模なプロジェクト</strong>
+            </Text>
+          </li>
+          <li>
+            <Text variant="body">
+              <strong>Vercel / Next.js との親和性を重視する場合</strong>
+            </Text>
+          </li>
+          <li>
+            <Text variant="body">
+              <strong>軽量さを重視する場合</strong>
+            </Text>
+          </li>
+        </ul>
+      </div>
+
+      {/* 関連リンク */}
+      <div style={{ marginTop: spacing.scale[12] }}>
+        <Text variant="h2" style={{ marginBottom: spacing.scale[6] }}>
+          関連リンク
+        </Text>
+        <ul style={{ marginLeft: spacing.scale[6] }}>
+          <li>
+            <a
+              href="/examples/react-query-vs-swr-article"
+              style={{ color: colors.brand.primary, textDecoration: "underline" }}
+            >
+              詳細記事: React Query vs SWR 詳細比較
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://tanstack.com/query/latest"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: colors.brand.primary, textDecoration: "underline" }}
+            >
+              React Query 公式ドキュメント
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://swr.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: colors.brand.primary, textDecoration: "underline" }}
+            >
+              SWR 公式ドキュメント
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
   );

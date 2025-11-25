@@ -60,6 +60,11 @@ export const examplesData: Record<string, ExampleInfo> = {
     description: "実際のコードで両者の違いを体験できる比較デモ。mutation管理、検索パラメータ、キャッシュ無効化を実装例で理解。",
     tags: ["React Query", "SWR", "Comparison", "Data Fetching"],
   },
+  "react-query-vs-swr-article": {
+    title: "React Query vs SWR 詳細記事",
+    description: "6つの実装パターンで理解する両者の違い。依存クエリ、enabled、mutateの使い分けを解説。",
+    tags: ["React Query", "SWR", "Article", "Best Practices"],
+  },
 };
 
 export type ExamplesData = typeof examplesData;

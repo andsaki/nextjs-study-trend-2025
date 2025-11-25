@@ -628,25 +628,26 @@ const swrFetcher = async (url: string): Promise<any> => {
 };
 
 function DependentDemo() {
+  const { mutate: globalMutate } = useSWRConfig(); // SWR: グローバルmutateを取得
   const [selectedRegion, setSelectedRegion] = useState<string>("");
   const [selectedPrefecture, setSelectedPrefecture] = useState<string>("");
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [selectedOffice, setSelectedOffice] = useState<string>("");
 
-  // 1階層目: 地域
+  // 1階層目: 地域（SWR: useSWR）
   const { data: regions, isLoading: regionsLoading } = useSWR("/api/swr-regions", swrFetcher);
 
-  // 2階層目: 都道府県（手動でURL構築 + null チェック）
+  // 2階層目: 都道府県（SWR: URL文字列を手動構築 + null で依存を表現）
   const prefecturesUrl = selectedRegion ? `/api/swr-prefectures?region=${selectedRegion}` : null;
   const { data: prefectures, isLoading: prefecturesLoading } = useSWR(prefecturesUrl, swrFetcher);
 
-  // 3階層目: 市区町村（手動でURL構築 + null チェック）
+  // 3階層目: 市区町村（SWR: URL文字列を手動構築 + null で依存を表現）
   const citiesUrl = selectedPrefecture
     ? `/api/swr-cities?prefecture=${selectedPrefecture}`
     : null;
   const { data: cities, isLoading: citiesLoading } = useSWR(citiesUrl, swrFetcher);
 
-  // 4階層目: 事業所（手動でURL構築 + null チェック）
+  // 4階層目: 事業所（SWR: URL文字列を手動構築 + null で依存を表現）
   const officesUrl = selectedCity ? `/api/swr-offices?city=${selectedCity}` : null;
   const { data: offices, isLoading: officesLoading } = useSWR(officesUrl, swrFetcher);
 
@@ -655,17 +656,26 @@ function DependentDemo() {
     setSelectedPrefecture("");
     setSelectedCity("");
     setSelectedOffice("");
+    // SWR: 手動でキャッシュをクリア（React Queryは自動）
+    globalMutate((key) => typeof key === "string" && key.startsWith("/api/swr-prefectures"));
+    globalMutate((key) => typeof key === "string" && key.startsWith("/api/swr-cities"));
+    globalMutate((key) => typeof key === "string" && key.startsWith("/api/swr-offices"));
   };
 
   const handlePrefectureChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedPrefecture(e.target.value);
     setSelectedCity("");
     setSelectedOffice("");
+    // SWR: 手動でキャッシュをクリア（React Queryは自動）
+    globalMutate((key) => typeof key === "string" && key.startsWith("/api/swr-cities"));
+    globalMutate((key) => typeof key === "string" && key.startsWith("/api/swr-offices"));
   };
 
   const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCity(e.target.value);
     setSelectedOffice("");
+    // SWR: 手動でキャッシュをクリア（React Queryは自動）
+    globalMutate((key) => typeof key === "string" && key.startsWith("/api/swr-offices"));
   };
 
   return (

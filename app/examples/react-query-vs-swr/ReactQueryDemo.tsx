@@ -651,31 +651,31 @@ function DependentDemo() {
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [selectedOffice, setSelectedOffice] = useState<string>("");
 
-  // 1階層目: 地域
+  // 1階層目: 地域（React Query: useQuery）
   const { data: regions, isLoading: regionsLoading } = useQuery({
-    queryKey: ["rq-regions"],
+    queryKey: ["rq-regions"], // 嬉しさ: 配列でキーを管理、階層的に整理しやすい
     queryFn: getRegions,
   });
 
-  // 2階層目: 都道府県（地域が選択されたら有効）
+  // 2階層目: 都道府県（React Query: useQuery + enabled で依存関係を宣言）
   const { data: prefectures, isLoading: prefecturesLoading } = useQuery({
-    queryKey: ["rq-prefectures", selectedRegion],
+    queryKey: ["rq-prefectures", selectedRegion], // 嬉しさ: selectedRegionが変わると自動で新しいキャッシュキーになる
     queryFn: () => getPrefectures(selectedRegion),
-    enabled: !!selectedRegion,
+    enabled: selectedRegion.length > 0, // 嬉しさ: 親が選択されるまで自動的にリクエストを待機
   });
 
-  // 3階層目: 市区町村（都道府県が選択されたら有効）
+  // 3階層目: 市区町村（React Query: useQuery + enabled で依存関係を宣言）
   const { data: cities, isLoading: citiesLoading } = useQuery({
-    queryKey: ["rq-cities", selectedPrefecture],
+    queryKey: ["rq-cities", selectedPrefecture], // 嬉しさ: selectedPrefectureが変わると自動で新しいキャッシュキーになる
     queryFn: () => getCities(selectedPrefecture),
-    enabled: !!selectedPrefecture,
+    enabled: selectedPrefecture.length > 0, // 嬉しさ: 親が選択されるまで自動的にリクエストを待機
   });
 
-  // 4階層目: 事業所（市区町村が選択されたら有効）
+  // 4階層目: 事業所（React Query: useQuery + enabled で依存関係を宣言）
   const { data: offices, isLoading: officesLoading } = useQuery({
-    queryKey: ["rq-offices", selectedCity],
+    queryKey: ["rq-offices", selectedCity], // 嬉しさ: selectedCityが変わると自動で新しいキャッシュキーになる
     queryFn: () => getOffices(selectedCity),
-    enabled: !!selectedCity,
+    enabled: selectedCity.length > 0, // 嬉しさ: 親が選択されるまで自動的にリクエストを待機
   });
 
   const handleRegionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -683,17 +683,23 @@ function DependentDemo() {
     setSelectedPrefecture("");
     setSelectedCity("");
     setSelectedOffice("");
+    // React Query: queryKeyが変わるだけで古いキャッシュは自動破棄される
+    // mutateやinvalidateを呼ぶ必要なし！
   };
 
   const handlePrefectureChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedPrefecture(e.target.value);
     setSelectedCity("");
     setSelectedOffice("");
+    // React Query: queryKeyが変わるだけで古いキャッシュは自動破棄される
+    // mutateやinvalidateを呼ぶ必要なし！
   };
 
   const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCity(e.target.value);
     setSelectedOffice("");
+    // React Query: queryKeyが変わるだけで古いキャッシュは自動破棄される
+    // mutateやinvalidateを呼ぶ必要なし！
   };
 
   return (

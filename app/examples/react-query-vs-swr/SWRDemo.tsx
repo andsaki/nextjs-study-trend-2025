@@ -382,9 +382,9 @@ function OptimisticDemo() {
     if (!items) return;
 
     // 楽観的更新を手動で実装
-    const optimisticData = items.map((item) =>
+    const optimisticData: Item[] = items.map((item) =>
       item.id === id
-        ? { ...item, status: item.status === "active" ? "completed" : "active" }
+        ? { ...item, status: (item.status === "active" ? "completed" : "active") as Item["status"] }
         : item
     );
 
